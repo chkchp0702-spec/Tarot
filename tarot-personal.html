@@ -704,6 +704,13 @@ const MODEL  = "claude-sonnet-5";
 /* 카드 그림: "" 이면 위키미디어에서 불러옵니다 */
 const IMG_BASE = "";
 
+const WIKI = "https://commons.wikimedia.org/wiki/Special:FilePath/";
+function imgURL(i, alt) {
+  const f = alt || IMGF[i];
+  if (IMG_BASE) return IMG_BASE + f;
+  return WIKI + encodeURIComponent(f) + "?width=420";
+}
+
 let SESSION_KEY = "";
 const getKey = () => MY_KEY || SESSION_KEY;
 
