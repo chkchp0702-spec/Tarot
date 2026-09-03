@@ -124,6 +124,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   padding:1.05rem 0;margin-bottom:1.8rem}
 .r-title h2{font-family:var(--display);font-weight:400;font-size:1.28rem;margin:0 0 .4rem;letter-spacing:.04em}
 .r-title p{margin:0;font-size:.9rem;color:var(--paper-dim)}
+.mode{font-family:var(--display);font-size:.88rem;letter-spacing:.04em;margin:0 0 .9rem;
+  padding:.45rem .8rem;border-radius:2px;display:inline-block}
+.mode.ai{background:rgba(120,160,110,.2);color:#A8CC9A;border:1px solid rgba(120,160,110,.5)}
+.mode.basic{background:rgba(156,66,56,.16);color:#E0A99E;border:1px solid rgba(156,66,56,.5)}
+.closing{margin-top:1rem;padding-top:.9rem;border-top:1px dotted rgba(192,138,46,.4);
+  font-size:.97rem;color:#DDD4C0}
 .readas{font-size:.95rem;color:var(--ochre);margin:.7rem 0 0;padding-top:.6rem;
   border-top:1px dotted rgba(192,138,46,.4)}
 
@@ -216,11 +222,11 @@ footer{margin-top:3.4rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,20
 
   <section class="keybox">
     <h2>시작하기 전에 · API 키</h2>
-    <p>내 키를 여기에 붙여넣으면 이 창을 닫을 때까지 기억합니다. 키는 이 폰 밖으로 나가지 않고, 카드 해석을 받을 때만 Anthropic에 직접 전달됩니다.</p>
+    <p>키를 붙여넣기만 하면 됩니다. 버튼을 누르지 않아도 적용됩니다. 이 폰에 저장되며 다시 열 때도 그대로 쓰입니다.</p>
     <div class="row">
       <input id="key" type="password" inputmode="text" autocomplete="off" spellcheck="false"
         placeholder="sk-ant-... 붙여넣기" aria-label="API 키">
-      <button class="btn" id="keyBtn">확인</button>
+      <button class="btn btn-ghost" id="keyClear">지우기</button>
     </div>
     <p class="st" id="keySt"></p>
     <p class="st" id="diag"></p>
@@ -243,7 +249,7 @@ footer{margin-top:3.4rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,20
 
   <section class="step">
     <p class="step-head">셋째 · 세 장을 뽑습니다</p>
-    <p class="step-note">78장을 섞어 21장을 펼쳤습니다. 손이 가는 카드를 세 번 누르세요.</p>
+    <p class="step-note">78장을 섞어 15장을 펼쳤습니다. 손이 가는 카드를 세 번 누르세요.</p>
     <div class="fan-stage">
       <div class="fan" id="fan"></div>
       <div class="fan-count" id="fanCount">세 장 남았습니다</div>
@@ -257,6 +263,7 @@ footer{margin-top:3.4rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,20
   </section>
 
   <section class="reading" id="reading" aria-live="polite">
+    <p class="mode" id="rMode"></p>
     <div class="r-title">
       <h2 id="rSpread"></h2>
       <p id="rQ"></p>
@@ -711,8 +718,14 @@ function imgURL(i, alt) {
   return WIKI + encodeURIComponent(f) + "?width=420";
 }
 
-let SESSION_KEY = "";
-const getKey = () => MY_KEY || SESSION_KEY;
+const KEY_STORE = "tarot_api_key";
+function getKey() {
+  if (MY_KEY) return MY_KEY;
+  const el = document.getElementById("key");
+  const v = el && el.value ? el.value.trim() : "";
+  if (v) return v;
+  try { return localStorage.getItem(KEY_STORE) || ""; } catch { return ""; }
+}
 
 const SYSTEM = `당신은 30년 경력의 타로 리더입니다. 라이더-웨이트 체계로 읽습니다.
 
@@ -720,7 +733,7 @@ const SYSTEM = `당신은 30년 경력의 타로 리더입니다. 라이더-웨�
 1. 질문을 먼저 정확히 이해합니다. 무엇을 알고 싶은 것인지, 그 사람이 지금 어떤 처지에 있는지 문장에서 읽어냅니다. 카드 뜻을 나열하지 않고, 그 질문에 대한 답으로 카드를 읽습니다.
 2. 같은 카드라도 질문에 따라 완전히 다르게 말합니다. 완드 10은 연애 질문에서는 혼자 관계를 떠안은 상태, 돈 질문에서는 갚을 것이 쌓인 상태, 이직 질문에서는 지금 일이 과부하라는 뜻입니다. 반드시 질문의 소재로 번역해서 말합니다.
 3. 자리(포지션)의 의미를 살립니다. 같은 카드가 '과거'에 있는 것과 '결과'에 있는 것은 다릅니다.
-4. 카드 그림을 묘사해 줍니다. 그 카드에 무엇이 그려져 있는지 한두 문장으로 짚고, 그 그림이 질문과 어떻게 겹치는지 말합니다. 이게 리딩을 살아 있게 만듭니다.
+4. 카드 그림을 반드시 묘사합니다. 라이더-웨이트 그림에 무엇이 그려져 있는지(인물의 자세, 표정, 손에 든 것, 배경, 숫자와 소품) 구체적으로 짚고, 그 그림이 질문자의 상황과 어떻게 겹치는지 말합니다. 이게 리딩을 살아 있게 만드는 핵심입니다. 그림 이야기를 건너뛰면 실패한 리딩입니다.
 5. 세 장을 하나의 이야기로 엮습니다. 두 번째 장부터는 앞 장과의 관계를 반드시 언급합니다. 흐름이 올라가는지 꺾이는지, 같은 수트가 반복되는지, 메이저가 끼어들었는지를 봅니다.
 6. 역방향은 단순히 '나쁘다'가 아닙니다. 좋은 카드는 힘이 빠지거나 늦어지고, 힘든 카드는 오히려 풀리거나 최악이 지났다는 뜻이 됩니다.
 
@@ -739,7 +752,7 @@ const SYSTEM = `당신은 30년 경력의 타로 리더입니다. 라이더-웨�
   "cards": [
     {
       "headline": "이 카드가 이 질문에 대해 하는 말 한 줄. 15자 안쪽. 카드 이름을 넣지 않는다.",
-      "body": "카드 그림을 짚고, 이 자리에서 이 질문에 대해 무엇을 뜻하는지. 질문의 소재로 번역해서 4~6문장.",
+      "body": "먼저 그림을 한두 문장으로 묘사하고, 그 그림이 이 질문과 어떻게 겹치는지 이어서 말한다. 그리고 이 자리에서 무엇을 뜻하는지 질문의 소재로 번역한다. 전체 5~7문장.",
       "link": "앞 장과 어떻게 이어지는지 1~2문장. 첫 번째 카드는 빈 문자열.",
       "action": "이 카드가 시키는 일 한 문장. 오늘이나 이번 주에 실제로 할 수 있는 것."
     }
@@ -748,7 +761,8 @@ const SYSTEM = `당신은 30년 경력의 타로 리더입니다. 라이더-웨�
     "verdict": "질문에 대한 직접적인 답 한 줄. 20자 안쪽.",
     "body": "왜 그런 답인지 세 장을 엮어서 4~6문장. 어느 카드가 근거인지 밝힌다.",
     "todo": ["가장 먼저 할 일", "그다음 할 일"],
-    "caution": "조심할 것 한 문장. 어느 카드가 그 신호인지 밝힌다."
+    "caution": "조심할 것 한 문장. 어느 카드가 그 신호인지 밝힌다.",
+    "closing": "리더가 마지막에 건네는 말 한두 문장. 따뜻하되 뻔하지 않게. 질문자의 상황에 맞춰서."
   }
 }
 
@@ -950,6 +964,7 @@ function conclHTML(k) {
     <p>${esc(k.body || "")}</p>
     ${todo.length ? `<h4>먼저 할 일</h4><ol>${todo.map((t) => `<li>${esc(t)}</li>`).join("")}</ol>` : ""}
     ${k.caution ? `<p class="cau"><b>조심할 것</b>${esc(k.caution)}</p>` : ""}
+    ${k.closing ? `<p class="closing">${esc(k.closing)}</p>` : ""}
   </div>`;
 }
 
@@ -988,11 +1003,19 @@ async function runReading() {
   $("rConcl").innerHTML = "";
   $("copied").textContent = "";
   $("reading").classList.add("on");
+  const usingKey = !!getKey();
+  $("rMode").className = "mode " + (usingKey ? "ai" : "basic");
+  $("rMode").textContent = usingKey ? "AI 리딩 · 질문을 읽고 해석합니다" : "기본 해석 · 키가 없어 미리 써둔 문장으로 답합니다";
   showLoading();
   if (!reduce) $("reading").scrollIntoView({ behavior: "smooth", block: "start" });
 
   let r = null;
   const key = getKey();
+  if (key && !MY_KEY) { try { localStorage.setItem(KEY_STORE, key); } catch {} }
+  if (!key) {
+    $("rMode").className = "mode basic";
+    $("rMode").textContent = "기본 해석 · 위쪽 칸에 API 키를 넣으면 진짜 리딩이 됩니다";
+  }
   if (key) {
     try {
       const lines = picked.map((d, i) =>
@@ -1020,7 +1043,7 @@ ${lines}
           "anthropic-dangerous-direct-browser-access": "true",
         },
         body: JSON.stringify({
-          model: MODEL, max_tokens: 2400, system: SYSTEM,
+          model: MODEL, max_tokens: 3200, system: SYSTEM,
           messages: [{ role: "user", content: user }],
         }),
       });
@@ -1046,7 +1069,14 @@ ${lines}
       await new Promise((z) => setTimeout(z, 1600));
     }
   }
-  if (!r) r = localReading(q);
+  if (!r) {
+    r = localReading(q);
+    $("rMode").className = "mode basic";
+    $("rMode").textContent = "기본 해석으로 읽었습니다";
+  } else {
+    $("rMode").className = "mode ai";
+    $("rMode").textContent = "AI 리딩 · 질문을 읽고 해석했습니다";
+  }
 
   lastReading = r;
   if (r.read_as) { $("rReadAs").hidden = false; $("rReadAs").textContent = "이렇게 읽었습니다 — " + r.read_as; }
@@ -1160,24 +1190,31 @@ function checkImages() {
   }, 4000);
 }
 
-function applyKey() {
-  const v = $("key").value.trim();
-  const st = $("keySt");
-  if (!v) { SESSION_KEY = ""; st.className = "st no"; st.textContent = "키가 없으면 기본 해석으로 작동합니다."; return; }
+function keyStatus() {
+  const st = $("keySt"), v = getKey();
+  if (MY_KEY) { st.className = "st ok"; st.textContent = "파일에 넣어둔 키를 사용합니다."; return; }
+  if (!v) { st.className = "st no"; st.textContent = "키가 없으면 기본 해석으로 작동합니다."; return; }
   if (!/^sk-ant-/.test(v)) { st.className = "st no"; st.textContent = "키 형태가 아닙니다. sk-ant- 로 시작해야 합니다."; return; }
-  SESSION_KEY = v;
   st.className = "st ok";
-  st.textContent = "키를 받았습니다. 이제 진짜 리딩으로 읽어 드립니다.";
+  st.textContent = "키가 적용됐습니다. 이제 진짜 리딩으로 읽어 드립니다.";
+  try { localStorage.setItem(KEY_STORE, v); } catch {}
 }
-$("keyBtn").onclick = applyKey;
-$("key").addEventListener("change", applyKey);
-$("key").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); applyKey(); } });
-if (MY_KEY) {
+$("key").addEventListener("input", keyStatus);
+$("key").addEventListener("change", keyStatus);
+$("key").addEventListener("blur", keyStatus);
+$("keyClear").onclick = () => {
   $("key").value = "";
-  $("key").placeholder = "파일에 키가 들어 있습니다";
-  $("keySt").className = "st ok";
-  $("keySt").textContent = "파일에 넣어둔 키를 사용합니다.";
-}
+  try { localStorage.removeItem(KEY_STORE); } catch {}
+  keyStatus();
+};
+/* 저장된 키 되살리기 */
+try {
+  const saved = localStorage.getItem(KEY_STORE);
+  if (saved && !MY_KEY) $("key").value = saved;
+} catch {}
+if (MY_KEY) { $("key").value = ""; $("key").placeholder = "파일에 키가 들어 있습니다"; }
+keyStatus();
+
 $("copyBtn").onclick = async () => {
   try { await navigator.clipboard.writeText(plainText()); $("copied").textContent = "복사했습니다."; }
   catch { $("copied").textContent = "복사가 막혀 있습니다. 화면의 글을 직접 선택해 복사하세요."; }
