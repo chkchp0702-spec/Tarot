@@ -2,258 +2,190 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>세 장의 카드 · 타로 리딩</title>
-<meta name="description" content="질문을 정하고 세 장을 뽑으면, 카드 사이의 관계까지 읽어 해석해 드립니다.">
+<meta name="description" content="세 장을 뽑으면 한마디, 풀이, 할 일, 그리고 판 전체를 그림으로 읽어 드립니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Song+Myung&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cloth:#1F3238;
-  --cloth-deep:#16252A;
-  --paper:#EDE3CC;
-  --paper-shade:#DCCFB2;
-  --ink:#241E16;
-  --ink-soft:#5A4F3D;
-  --ochre:#C08A2E;
-  --rust:#9C4238;
-  --display:"Song Myung",serif;
-  --text:"Gowun Batang",serif;
+  --cloth:#1F3238; --cloth-deep:#16252A;
+  --paper:#EDE3CC; --paper-dim:#B9C6C4; --paper-far:#8FA09F;
+  --ink:#241E16; --ink-soft:#5A4F3D;
+  --ochre:#C08A2E; --rust:#9C4238;
+  --fire:#C05A2E; --water:#3C7A8C; --air:#93A0AC; --earth:#A88420;
+  --display:"Song Myung",serif; --text:"Gowun Batang",serif;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;
-  background:
-    radial-gradient(120% 80% at 50% -10%, #2A4149 0%, transparent 60%),
-    var(--cloth);
-  color:var(--paper);
-  font-family:var(--text);
-  line-height:1.85;
-  overflow-x:hidden;
-}
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(rgba(192,138,46,.06) 1px, transparent 1px);
-  background-size:5px 5px;
-}
-.wrap{position:relative;z-index:1;max-width:44rem;margin:0 auto;padding:0 1.25rem 5rem}
+body{margin:0;background:radial-gradient(120% 80% at 50% -10%,#2A4149 0%,transparent 60%),var(--cloth);
+  color:var(--paper);font-family:var(--text);line-height:1.85;overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(192,138,46,.06) 1px,transparent 1px);background-size:5px 5px}
+.wrap{position:relative;z-index:1;max-width:44rem;margin:0 auto;padding:0 1.15rem 5rem}
 
-/* ---------- masthead ---------- */
-.masthead{padding:3.25rem 0 1.5rem;text-align:center}
-.masthead h1{
-  font-family:var(--display);font-weight:400;
-  font-size:clamp(2.1rem,9vw,3.1rem);
-  line-height:1.15;margin:0;letter-spacing:.06em;
-  color:var(--paper);
-}
-.masthead p{
-  margin:.9rem auto 0;max-width:26rem;
-  font-size:.95rem;color:#B9C6C4;
-}
-.rule{
-  width:100%;height:1px;margin:2rem 0 0;
-  background:linear-gradient(90deg,transparent,rgba(192,138,46,.55) 20%,rgba(192,138,46,.55) 80%,transparent);
-}
+.masthead{padding:3rem 0 1.4rem;text-align:center}
+.masthead h1{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,9vw,3.1rem);
+  line-height:1.15;margin:0;letter-spacing:.06em}
+.masthead p{margin:.85rem auto 0;max-width:25rem;font-size:.94rem;color:var(--paper-dim)}
+.rule{height:1px;margin-top:1.9rem;
+  background:linear-gradient(90deg,transparent,rgba(192,138,46,.55) 20%,rgba(192,138,46,.55) 80%,transparent)}
 
-/* ---------- step heads ---------- */
-.step{margin:2.75rem 0 0}
-.step-head{
-  font-family:var(--display);font-size:1.15rem;letter-spacing:.04em;
-  margin:0 0 .2rem;color:var(--ochre);
-}
-.step-note{margin:0 0 1.1rem;font-size:.88rem;color:#A9B7B6}
+.step{margin-top:2.6rem}
+.step-head{font-family:var(--display);font-size:1.13rem;letter-spacing:.04em;margin:0 0 .15rem;color:var(--ochre)}
+.step-note{margin:0 0 1rem;font-size:.87rem;color:var(--paper-dim)}
 
-/* ---------- spread picker ---------- */
-.spreads{display:grid;gap:.6rem}
-.spread{
-  display:block;width:100%;text-align:left;cursor:pointer;
-  background:rgba(237,227,204,.045);
-  border:1px solid rgba(237,227,204,.16);
-  color:var(--paper);font-family:var(--text);
-  padding:.85rem 1rem;border-radius:2px;
-  transition:background .18s,border-color .18s;
-}
-.spread:hover{background:rgba(237,227,204,.09)}
-.spread[aria-pressed="true"]{
-  border-color:var(--ochre);
-  background:rgba(192,138,46,.14);
-  box-shadow:inset 3px 0 0 var(--ochre);
-}
-.spread b{font-family:var(--display);font-weight:400;font-size:1.02rem;letter-spacing:.03em}
-.spread span{display:block;font-size:.83rem;color:#A9B7B6;line-height:1.6}
+.spreads{display:grid;gap:.55rem}
+.spread{display:block;width:100%;text-align:left;cursor:pointer;background:rgba(237,227,204,.045);
+  border:1px solid rgba(237,227,204,.16);color:var(--paper);font-family:var(--text);
+  padding:.8rem .95rem;border-radius:2px;transition:background .18s,border-color .18s}
+.spread[aria-pressed="true"]{border-color:var(--ochre);background:rgba(192,138,46,.14);box-shadow:inset 3px 0 0 var(--ochre)}
+.spread b{font-family:var(--display);font-weight:400;font-size:1.01rem;letter-spacing:.03em}
+.spread span{display:block;font-size:.82rem;color:var(--paper-dim);line-height:1.6}
 
-/* ---------- question ---------- */
-.q-field{
-  width:100%;background:rgba(0,0,0,.18);
-  border:1px solid rgba(237,227,204,.18);border-radius:2px;
-  color:var(--paper);font-family:var(--text);font-size:1rem;
-  padding:.8rem .9rem;line-height:1.6;
-}
+.q-field{width:100%;background:rgba(0,0,0,.18);border:1px solid rgba(237,227,204,.18);border-radius:2px;
+  color:var(--paper);font-family:var(--text);font-size:1rem;padding:.78rem .9rem;line-height:1.6}
 .q-field::placeholder{color:#7E8E8D}
 .q-field:focus{outline:2px solid var(--ochre);outline-offset:1px;border-color:transparent}
-.orient{margin:.75rem 0 0;font-size:.88rem;color:#A9B7B6;display:flex;align-items:center;gap:.5rem}
+.orient{margin-top:.7rem;font-size:.87rem;color:var(--paper-dim);display:flex;align-items:center;gap:.5rem}
 .orient input{width:1.05rem;height:1.05rem;accent-color:var(--ochre);margin:0}
 
-/* ---------- fan ---------- */
-.fan-stage{
-  position:relative;height:270px;margin:1.25rem 0 0;
-  touch-action:manipulation;
-}
-.fan{position:absolute;left:50%;bottom:-42px;width:0;height:0}
-.slot{
-  position:absolute;width:74px;height:122px;margin-left:-37px;
-  transform-origin:50% 118%;
+/* ---- 부채꼴 ---- */
+.fan-stage{position:relative;height:264px;margin-top:1.1rem;touch-action:manipulation;user-select:none}
+.fan{position:absolute;left:50%;bottom:-40px;width:0;height:0}
+.slot{position:absolute;width:74px;height:122px;margin-left:-37px;transform-origin:50% 118%;
   cursor:pointer;background:none;border:0;padding:0;
-  transition:transform .3s cubic-bezier(.2,.7,.3,1);
-}
-.slot:disabled{cursor:default}
-.slot:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:3px}
-.slot .back{
-  width:100%;height:100%;border-radius:3px;
-  background:
-    repeating-linear-gradient(45deg,rgba(192,138,46,.34) 0 1px,transparent 1px 9px),
-    repeating-linear-gradient(-45deg,rgba(192,138,46,.34) 0 1px,transparent 1px 9px),
-    radial-gradient(circle at 50% 50%, rgba(192,138,46,.3) 0 12%, transparent 13%),
-    linear-gradient(170deg,#2E4A53,#1A2B31);
-  border:1px solid rgba(192,138,46,.5);
-  box-shadow:0 6px 14px rgba(0,0,0,.42);
-  transition:box-shadow .25s;
-}
-.slot:not(:disabled):hover{transform:var(--t) translateY(-16px)}
-.slot.taken{opacity:0;pointer-events:none;transform:var(--t) translateY(-120px) scale(.9)}
-.fan-count{
-  position:absolute;left:0;right:0;bottom:-4px;text-align:center;
-  font-size:.84rem;color:#8FA09F;
-}
+  transition:transform .26s cubic-bezier(.2,.7,.3,1),opacity .3s;will-change:transform}
+.slot .back{display:block;width:100%;height:100%;border-radius:4px;
+  background:repeating-linear-gradient(45deg,rgba(192,138,46,.32) 0 1px,transparent 1px 9px),
+             repeating-linear-gradient(-45deg,rgba(192,138,46,.32) 0 1px,transparent 1px 9px),
+             radial-gradient(circle at 50% 50%,rgba(192,138,46,.3) 0 12%,transparent 13%),
+             linear-gradient(170deg,#2E4A53,#1A2B31);
+  border:1px solid rgba(192,138,46,.5);box-shadow:0 6px 14px rgba(0,0,0,.42)}
+.slot:not(.gone):active{transform:var(--t) translateY(-18px) scale(1.03)}
+.slot.gone{opacity:0;pointer-events:none}
+.slot:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:4px}
+.fan-count{position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:.83rem;color:var(--paper-far)}
 
-/* ---------- drawn cards ---------- */
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1.5rem 0 0}
-.card{
-  position:relative;aspect-ratio:5/8;border-radius:3px;
-  background:rgba(237,227,204,.05);
-  border:1px dashed rgba(237,227,204,.22);
-  display:flex;align-items:center;justify-content:center;
-  perspective:900px;
-}
-.card .pos-label{
-  font-family:var(--display);font-size:.82rem;color:#7E8E8D;letter-spacing:.05em;
-}
-.card.filled{border:0;background:none}
-.face{
-  position:absolute;inset:0;border-radius:3px;
-  background:linear-gradient(172deg,#F3EBD8,#DFD2B4);
-  border:1px solid #B6A483;
-  box-shadow:0 8px 20px rgba(0,0,0,.45);
-  color:var(--ink);
-  display:flex;flex-direction:column;align-items:center;
-  padding:.5rem .35rem;
-  opacity:0;transform:rotateY(90deg);
-  transition:opacity .45s ease, transform .55s cubic-bezier(.3,.8,.3,1);
-}
-.card.revealed .face{opacity:1;transform:rotateY(0)}
-.face .num{
-  font-family:var(--display);font-size:.72rem;letter-spacing:.12em;
-  color:var(--rust);border-bottom:1px solid rgba(36,30,22,.22);
-  padding-bottom:.2rem;width:76%;text-align:center;
-}
-.face .glyph{
-  flex:1;display:flex;align-items:center;justify-content:center;width:100%;
-}
-.face .glyph svg{width:56%;max-width:52px;height:auto}
-.face.rev .glyph svg{transform:rotate(180deg)}
-.face .nm{
-  font-family:var(--display);font-size:clamp(.68rem,3vw,.86rem);
-  text-align:center;line-height:1.3;letter-spacing:.02em;
-}
-.face .or{
-  font-size:.64rem;margin-top:.15rem;letter-spacing:.08em;
-}
-.face.rev .or{color:var(--rust)}
-.face:not(.rev) .or{color:var(--ink-soft)}
+/* ---- 날아가는 카드 ---- */
+.fly{position:absolute;z-index:60;pointer-events:none;transform-origin:50% 50%;
+  transition:transform .6s cubic-bezier(.22,.68,.24,1);will-change:transform}
+.fly-p{position:absolute;inset:0;perspective:900px}
+.fly-in{position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .46s cubic-bezier(.42,.06,.3,1)}
+.fly-in.flip{transform:rotateY(180deg)}
+.fly-b,.fly-f{position:absolute;inset:0;border-radius:4px;-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden}
+.fly-b{background:repeating-linear-gradient(45deg,rgba(192,138,46,.32) 0 1px,transparent 1px 9px),
+             repeating-linear-gradient(-45deg,rgba(192,138,46,.32) 0 1px,transparent 1px 9px),
+             radial-gradient(circle at 50% 50%,rgba(192,138,46,.3) 0 12%,transparent 13%),
+             linear-gradient(170deg,#2E4A53,#1A2B31);
+  border:1px solid rgba(192,138,46,.5);box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.fly-f{transform:rotateY(180deg)}
 
-/* ---------- actions ---------- */
-.actions{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.6rem 0 0}
-.btn{
-  font-family:var(--display);font-size:.98rem;letter-spacing:.06em;
-  padding:.72rem 1.5rem;border-radius:2px;cursor:pointer;
-  border:1px solid var(--ochre);background:var(--ochre);color:#1A2B31;
-  transition:filter .18s,opacity .18s;
-}
-.btn:hover{filter:brightness(1.1)}
-.btn[disabled]{opacity:.35;cursor:default;filter:none}
+/* ---- 결과판 ---- */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1.4rem}
+.cell{position:relative;aspect-ratio:5/8;border-radius:4px;background:rgba(237,227,204,.05);
+  border:1px dashed rgba(237,227,204,.22);display:flex;align-items:center;justify-content:center}
+.cell .pos-label{font-family:var(--display);font-size:.8rem;color:var(--paper-far);letter-spacing:.05em}
+.cell.on{border:0;background:none}
+
+.face{position:absolute;inset:0;border-radius:4px;background:linear-gradient(172deg,#F3EBD8,#DFD2B4);
+  border:1px solid #B6A483;box-shadow:0 8px 20px rgba(0,0,0,.45);color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;padding:.45rem .3rem;overflow:hidden}
+.face .num{font-family:var(--display);font-size:.7rem;letter-spacing:.1em;color:var(--rust);
+  border-bottom:1px solid rgba(36,30,22,.22);padding-bottom:.15rem;width:74%;text-align:center}
+.face .glyph{flex:1;display:flex;align-items:center;justify-content:center;width:100%}
+.face .glyph svg{width:56%;max-width:50px;height:auto}
+.face.rv .glyph svg{transform:rotate(180deg)}
+.face .nm{font-family:var(--display);font-size:clamp(.66rem,3vw,.85rem);text-align:center;line-height:1.28}
+.face .or{font-size:.62rem;margin-top:.1rem;letter-spacing:.08em;color:var(--ink-soft)}
+.face.rv .or{color:var(--rust)}
+
+.actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.5rem}
+.btn{font-family:var(--display);font-size:.97rem;letter-spacing:.06em;padding:.7rem 1.45rem;border-radius:2px;
+  cursor:pointer;border:1px solid var(--ochre);background:var(--ochre);color:#1A2B31;transition:filter .18s,opacity .18s}
+.btn[disabled]{opacity:.32;cursor:default}
 .btn-ghost{background:none;color:var(--paper);border-color:rgba(237,227,204,.3)}
-.btn-ghost:hover{border-color:var(--paper);filter:none}
 
-/* ---------- reading ---------- */
-.reading{margin:3.25rem 0 0;display:none}
+/* ---- 해석 ---- */
+.reading{margin-top:3rem;display:none}
 .reading.on{display:block}
-.reading-top{
-  border-top:1px solid rgba(192,138,46,.5);
-  border-bottom:1px solid rgba(192,138,46,.5);
-  padding:1.15rem 0;margin-bottom:2rem;
-}
-.reading-top h2{
-  font-family:var(--display);font-weight:400;font-size:1.35rem;
-  margin:0 0 .5rem;letter-spacing:.04em;
-}
-.reading-top .qline{margin:0;font-size:.92rem;color:#BCC9C7}
-.tableau{font-size:1rem;color:#E4DBC6;margin:0 0 2.25rem}
-.entry{margin:0 0 2.1rem}
-.entry h3{
-  font-family:var(--display);font-weight:400;margin:0 0 .1rem;
-  font-size:1.12rem;letter-spacing:.03em;color:var(--paper);
-}
-.entry .meta{
-  margin:0 0 .55rem;font-size:.8rem;letter-spacing:.06em;color:var(--ochre);
-}
-.entry p{margin:0 0 .55rem;color:#DDD4C0;font-size:.98rem}
-.entry .keys{font-size:.84rem;color:#93A3A2;margin:0}
-.advice{
-  border-left:2px solid var(--rust);padding:.1rem 0 .1rem 1rem;
-  margin:2.5rem 0 0;
-}
-.advice h3{font-family:var(--display);font-weight:400;font-size:1.1rem;margin:0 0 .4rem;color:var(--paper)}
-.advice p{margin:0;color:#DDD4C0}
-.copied{font-size:.84rem;color:var(--ochre);margin:.7rem 0 0;min-height:1.2em}
+.r-title{border-top:1px solid rgba(192,138,46,.5);border-bottom:1px solid rgba(192,138,46,.5);padding:1.05rem 0;margin-bottom:1.9rem}
+.r-title h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:0 0 .4rem;letter-spacing:.04em}
+.r-title p{margin:0;font-size:.9rem;color:var(--paper-dim)}
 
-footer{
-  margin:4rem 0 0;padding-top:1.5rem;
-  border-top:1px solid rgba(237,227,204,.14);
-  font-size:.82rem;color:#7E8E8D;line-height:1.8;
-}
-footer a{color:#A9B7B6}
+.sec{margin-bottom:2.4rem}
+.sec > h3{font-family:var(--display);font-weight:400;font-size:1.06rem;margin:0 0 .8rem;
+  color:var(--ochre);letter-spacing:.04em}
+.verdict{font-family:var(--display);font-size:clamp(1.4rem,6.5vw,1.9rem);line-height:1.3;margin:0 0 .5rem;letter-spacing:.02em}
+.verdict-sub{margin:0 0 1.1rem;font-size:.98rem;color:#DDD4C0}
+figure{margin:0 0 1.1rem}
+figure svg{display:block;width:100%;height:auto}
+.legend{font-size:.8rem;color:var(--paper-far);margin:.3rem 0 0;line-height:1.6}
+
+.three{list-style:none;margin:0;padding:0}
+.three li{display:flex;gap:.7rem;padding:.6rem 0;border-bottom:1px solid rgba(237,227,204,.12);font-size:.96rem}
+.three li:last-child{border-bottom:0}
+.three b{flex:0 0 4.6rem;font-family:var(--display);font-weight:400;color:var(--ochre);letter-spacing:.03em}
+.three span{color:#DDD4C0}
+
+.entry{padding:1.2rem 0;border-top:1px solid rgba(237,227,204,.14)}
+.entry:first-of-type{border-top:0;padding-top:.2rem}
+.entry .top{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
+.entry .pos{font-family:var(--display);font-size:.84rem;letter-spacing:.06em;color:#1A2B31;
+  background:var(--ochre);padding:.08rem .55rem;border-radius:2px}
+.entry .cn{font-family:var(--display);font-size:1.04rem}
+.entry .rv{font-size:.78rem;color:var(--rust)}
+.entry .up{font-size:.78rem;color:var(--paper-far)}
+.oneline{font-family:var(--display);font-size:clamp(1.15rem,5.2vw,1.42rem);line-height:1.42;
+  margin:.15rem 0 .8rem;color:var(--paper)}
+.oneline::before{content:"“";color:var(--ochre);margin-right:.1em}
+.oneline::after{content:"”";color:var(--ochre);margin-left:.05em}
+.kv{margin:0 0 .55rem;font-size:.95rem;color:#DDD4C0}
+.kv b{font-family:var(--display);font-weight:400;color:var(--ochre);margin-right:.4rem}
+.todo{background:rgba(192,138,46,.11);border-left:2px solid var(--ochre);padding:.6rem .8rem;
+  margin:.2rem 0 .7rem;font-size:.96rem}
+.todo b{font-family:var(--display);font-weight:400;color:var(--ochre);margin-right:.4rem}
+.mini{display:flex;align-items:center;gap:.5rem;font-size:.79rem;color:var(--paper-far)}
+.mini .bar{flex:1;height:5px;background:rgba(237,227,204,.14);border-radius:3px;overflow:hidden;max-width:160px}
+.mini .bar i{display:block;height:100%;border-radius:3px}
+
+.advice{border-left:2px solid var(--rust);padding-left:1rem;margin-top:2.2rem}
+.advice h3{font-family:var(--display);font-weight:400;font-size:1.06rem;margin:0 0 .5rem;color:var(--paper)}
+.advice p{margin:0 0 .6rem;color:#DDD4C0}
+.copied{font-size:.83rem;color:var(--ochre);margin-top:.7rem;min-height:1.2em}
+
+footer{margin-top:3.6rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,204,.14);
+  font-size:.81rem;color:var(--paper-far);line-height:1.8}
 
 @media (max-width:400px){
   .slot{width:62px;height:104px;margin-left:-31px}
-  .fan-stage{height:230px}
+  .fan-stage{height:226px}
+  .three b{flex-basis:4rem;font-size:.9rem}
 }
-@media (prefers-reduced-motion:reduce){
-  *{transition-duration:.01ms !important}
-}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <header class="masthead">
     <h1>세 장의 카드</h1>
-    <p>묻고 싶은 것을 정한 다음 펼쳐진 덱에서 세 장을 뽑으세요. 카드 하나하나뿐 아니라 세 장이 함께 만드는 판까지 읽어 드립니다.</p>
+    <p>묻고 싶은 것을 정하고 세 장을 뽑으세요. 카드 한마디, 쉬운 풀이, 오늘 할 일까지 그림으로 보여 드립니다.</p>
     <div class="rule"></div>
   </header>
 
   <section class="step">
     <p class="step-head">첫째 · 무엇을 물을지 정합니다</p>
-    <p class="step-note">축을 정해두지 않고 뽑으면 해석이 흐려집니다. 지금 상황에 맞는 배열을 고르세요.</p>
+    <p class="step-note">축을 정해두지 않고 뽑으면 해석이 흐려집니다.</p>
     <div class="spreads" id="spreads"></div>
   </section>
 
   <section class="step">
     <p class="step-head">둘째 · 질문을 문장으로 씁니다</p>
-    <p class="step-note">예·아니오로 답할 질문보다 “어떻게”, “무엇을”로 여는 질문에 카드가 더 많이 말합니다.</p>
-    <label for="q" class="sr-only" style="position:absolute;left:-9999px">질문</label>
-    <input id="q" class="q-field" type="text" maxlength="120" placeholder="이 관계에서 내가 놓치고 있는 것은 무엇일까">
+    <p class="step-note">“될까요?”보다 “어떻게 하면 좋을까요?”에 카드가 더 많이 답합니다.</p>
+    <input id="q" class="q-field" type="text" maxlength="120" placeholder="이 관계에서 내가 놓치고 있는 것은 무엇일까" aria-label="질문">
     <label class="orient"><input type="checkbox" id="revOn" checked> 역방향도 함께 봅니다</label>
   </section>
 
@@ -264,363 +196,817 @@ footer a{color:#A9B7B6}
       <div class="fan" id="fan"></div>
       <div class="fan-count" id="fanCount">세 장 남았습니다</div>
     </div>
-
     <div class="board" id="board"></div>
-
     <div class="actions">
-      <button class="btn" id="readBtn" disabled>해석 읽기</button>
+      <button class="btn" id="readBtn" disabled>해석 다시 보기</button>
       <button class="btn btn-ghost" id="resetBtn">다시 섞기</button>
     </div>
   </section>
 
   <section class="reading" id="reading" aria-live="polite">
-    <div class="reading-top">
-      <h2 id="rSpread"></h2>
-      <p class="qline" id="rQ"></p>
+    <div class="r-title"><h2 id="rSpread"></h2><p id="rQ"></p></div>
+    <div class="sec">
+      <h3>한눈에 보기</h3>
+      <p class="verdict" id="rVerdict"></p>
+      <p class="verdict-sub" id="rVerdictSub"></p>
+      <figure id="rGauge"></figure>
+      <ul class="three" id="rThree"></ul>
     </div>
-    <p class="tableau" id="rTableau"></p>
-    <div id="rEntries"></div>
-    <div class="advice">
-      <h3>맺는 조언</h3>
-      <p id="rAdvice"></p>
+    <div class="sec">
+      <h3>흐름</h3>
+      <figure id="rFlow"></figure>
+      <p class="legend" id="rFlowNote"></p>
     </div>
-    <div class="actions">
-      <button class="btn btn-ghost" id="copyBtn">해석 복사하기</button>
+    <div class="sec">
+      <h3>무엇의 문제인가</h3>
+      <figure id="rAxes"></figure>
+      <p class="legend" id="rAxesNote"></p>
     </div>
+    <div class="sec">
+      <h3>카드 하나씩</h3>
+      <div id="rEntries"></div>
+    </div>
+    <div class="advice"><h3>맺는 조언</h3><div id="rAdvice"></div></div>
+    <div class="actions"><button class="btn btn-ghost" id="copyBtn">해석 복사하기</button></div>
     <p class="copied" id="copied"></p>
   </section>
 
   <footer>
-    같은 질문을 답이 마음에 들 때까지 다시 뽑으면 리딩이 아니라 자기위안이 됩니다. 한 질문에 한 번만 뽑고, 뽑은 것을 기록해 두세요.<br>
-    라이더-웨이트 체계 78장 기준. 카드 의미는 전통적 해석을 따르며, 결정은 언제나 뽑은 사람의 몫입니다.
+    답이 마음에 들 때까지 다시 뽑으면 리딩이 아니라 자기위안이 됩니다. 한 질문에 한 번만 뽑고 기록해 두세요.<br>
+    라이더-웨이트 78장 기준. 결정은 언제나 뽑은 사람의 몫입니다.
   </footer>
-
 </div>
-
 <script>
-/* ============================================================
-   덱 · 78장
-   s: 수트(major/wands/cups/swords/pentacles)
-   n: 표기 번호 | k: 키워드 | u: 정방향 | r: 역방향
-   ============================================================ */
+/* e: 기운 점수 0~10 | h: [정방향 한마디, 역방향 한마디] | ad: [정방향 할 일, 역방향 할 일] */
 const DECK=[
-{s:"major",n:"0",nm:"바보",en:"The Fool",k:["시작","순수","무모함"],u:"아직 아무것도 정해지지 않은 출발점입니다. 경험이 없다는 것이 약점이 아니라 자유로 작동하는 드문 시기입니다.",r:"준비 없이 뛰어들어 대가를 치르는 국면입니다. 설렘과 충동을 구별해야 합니다."},
-{s:"major",n:"I",nm:"마법사",en:"The Magician",k:["의지","실행력","자원"],u:"필요한 것이 이미 손안에 다 있습니다. 하겠다고 마음먹는 순간 움직이기 시작하는 판입니다.",r:"말과 계획만 앞서고 실행이 비어 있습니다. 재능을 잘못된 곳에 쓰고 있는지 점검해야 합니다."},
-{s:"major",n:"II",nm:"여사제",en:"The High Priestess",k:["직관","비밀","기다림"],u:"드러난 정보보다 감이 정확한 국면입니다. 아직 말하지 않은 것, 숨겨진 사정이 판을 움직입니다.",r:"직관을 무시하거나, 반대로 비밀이 새어 나가 문제가 됩니다. 스스로에게 솔직하지 못한 지점이 있습니다."},
-{s:"major",n:"III",nm:"여황제",en:"The Empress",k:["풍요","돌봄","감각"],u:"자라나고 있는 것이 있습니다. 억지로 밀지 않고 돌보면 결실이 오는 흐름입니다.",r:"베푸는 쪽으로만 기울어 자신이 비어 갑니다. 과보호나 정체된 풍요일 수 있습니다."},
-{s:"major",n:"IV",nm:"황제",en:"The Emperor",k:["질서","권위","경계"],u:"구조와 규칙이 답입니다. 원칙을 세우고 지키는 사람이 주도권을 갖습니다.",r:"통제가 과하거나, 반대로 기준이 없어 흔들립니다. 완고함이 문제를 만듭니다."},
-{s:"major",n:"V",nm:"교황",en:"The Hierophant",k:["전통","배움","제도"],u:"이미 검증된 방식과 스승, 제도의 도움을 받을 때입니다. 혼자 새로 발명할 필요가 없습니다.",r:"틀에 맞지 않는 자리에 자신을 억지로 끼워 넣고 있습니다. 관습을 벗어나야 하는 순간입니다."},
-{s:"major",n:"VI",nm:"연인",en:"The Lovers",k:["선택","결합","가치"],u:"마음이 끌리는 결합이자, 무엇을 더 중요하게 여기는지 드러나는 선택입니다. 둘 중 하나를 고르는 문제입니다.",r:"가치가 어긋나 있거나 결정을 미루고 있습니다. 끌림과 옳음이 갈라선 상태입니다."},
-{s:"major",n:"VII",nm:"전차",en:"The Chariot",k:["전진","의지","돌파"],u:"방향을 정하고 밀어붙이면 통과합니다. 상반된 힘을 한 방향으로 묶어내는 능력이 관건입니다.",r:"에너지가 사방으로 흩어지거나 브레이크 없이 달립니다. 속도보다 방향을 먼저 봐야 합니다."},
-{s:"major",n:"VIII",nm:"힘",en:"Strength",k:["인내","부드러운 용기","길들임"],u:"완력이 아니라 견디는 힘으로 이깁니다. 서두르지 않고 반복해서 다루면 사나운 것도 순해집니다.",r:"참는 것이 한계에 왔거나, 자신의 욕구를 억누르다 탈이 납니다. 자신감이 바닥난 상태입니다."},
-{s:"major",n:"IX",nm:"은둔자",en:"The Hermit",k:["성찰","고독","탐구"],u:"물러나 혼자 생각할 시간이 필요합니다. 답은 밖의 소음이 아니라 정리된 내면에 있습니다.",r:"고립이 길어져 도움을 거절하고 있습니다. 이제는 나와서 사람을 만나야 합니다."},
-{s:"major",n:"X",nm:"운명의 수레바퀴",en:"Wheel of Fortune",k:["전환","순환","타이밍"],u:"판이 저절로 돌아갑니다. 지금의 상태는 오래 유지되지 않으니, 오는 변화에 몸을 실으면 됩니다.",r:"흐름이 불리하게 돌거나 같은 패턴이 반복됩니다. 무엇이 순환을 만드는지 찾아야 합니다."},
-{s:"major",n:"XI",nm:"정의",en:"Justice",k:["균형","인과","책임"],u:"뿌린 대로 정확히 돌아옵니다. 감정을 빼고 사실과 형평으로 판단할 때 문제가 풀립니다.",r:"한쪽으로 기울어진 결정, 회피한 책임이 걸려 있습니다. 편향을 인정하는 것이 첫 단계입니다."},
-{s:"major",n:"XII",nm:"매달린 사람",en:"The Hanged Man",k:["멈춤","관점 전환","유예"],u:"의도적으로 멈춰야 보이는 것이 있습니다. 지금의 정체는 낭비가 아니라 각도를 바꾸는 시간입니다.",r:"멈춤이 미루기로 변했습니다. 희생을 자처하며 아무 진전도 만들지 못하고 있습니다."},
-{s:"major",n:"XIII",nm:"죽음",en:"Death",k:["종결","정리","재생"],u:"끝나야 할 것이 끝납니다. 붙잡을수록 아프고, 놓으면 자리가 비어 다음 것이 들어옵니다.",r:"끝난 것을 끝났다고 인정하지 못해 오래 끌립니다. 변화에 대한 저항이 소모를 만듭니다."},
-{s:"major",n:"XIV",nm:"절제",en:"Temperance",k:["조율","중용","인내"],u:"극단이 아니라 배합의 문제입니다. 다른 성질을 천천히 섞어 알맞은 지점을 찾아가는 시기입니다.",r:"과하거나 부족합니다. 균형을 잃고 한쪽으로 쏟아부어 소진되고 있습니다."},
-{s:"major",n:"XV",nm:"악마",en:"The Devil",k:["집착","속박","욕망"],u:"알면서도 벗어나지 못하는 것이 있습니다. 사슬을 쥐고 있는 손이 실은 자기 손임을 보게 됩니다.",r:"묶여 있던 것에서 풀려나기 시작합니다. 무엇에 중독되어 있었는지 자각하는 단계입니다."},
-{s:"major",n:"XVI",nm:"탑",en:"The Tower",k:["붕괴","각성","급변"],u:"세워둔 전제가 무너집니다. 아프지만 애초에 잘못 놓인 토대를 알려주는 사건입니다.",r:"무너질 것이 겨우 버티고 있거나, 이미 지난 충격의 여파를 정리하는 중입니다."},
-{s:"major",n:"XVII",nm:"별",en:"The Star",k:["희망","치유","회복"],u:"고비를 지난 뒤의 맑음입니다. 크게 극적이지 않지만 조용히 회복되고 방향이 보입니다.",r:"기대를 잃고 냉소로 기울었습니다. 혹은 근거 없는 낙관에 기대고 있습니다."},
-{s:"major",n:"XVIII",nm:"달",en:"The Moon",k:["불안","착각","무의식"],u:"보이는 것이 전부가 아니고, 두려움이 사실보다 커진 상태입니다. 판단을 서두르면 안 됩니다.",r:"안개가 걷히고 오해가 풀립니다. 숨겨져 있던 것이 드러나기 시작합니다."},
-{s:"major",n:"XIX",nm:"태양",en:"The Sun",k:["성공","명료","활력"],u:"숨길 것 없이 잘 되는 흐름입니다. 애매했던 것이 밝아지고 힘이 돌아옵니다.",r:"기쁨이 겉치레에 머물거나, 자신감이 과장으로 흐릅니다. 좋은 것을 온전히 누리지 못합니다."},
-{s:"major",n:"XX",nm:"심판",en:"Judgement",k:["부름","총결산","각성"],u:"지금까지 해온 것이 한꺼번에 계산되는 지점입니다. 오래 미뤄둔 부름에 응답할 때입니다.",r:"자기 심판이 지나치게 가혹하거나, 결정적 신호를 계속 무시하고 있습니다."},
-{s:"major",n:"XXI",nm:"세계",en:"The World",k:["완성","통합","마무리"],u:"한 주기가 온전히 닫힙니다. 흩어져 있던 조각이 하나로 맞물리며 다음 단계로 넘어갑니다.",r:"거의 다 왔는데 마지막을 못 닫고 있습니다. 미련이 마침표를 늦춥니다."},
+{s:"major",n:"0",nm:"바보",en:"The Fool",k:["시작","순수","무모함"],e:6,
+h:["아직 아무것도 정해지지 않았다","준비 없이 뛰어들었다"],
+ad:["겁내지 말고 첫발을 떼세요","뛰기 전에 확인할 것 세 가지만 정하세요"],
+u:"아직 아무것도 정해지지 않은 출발점입니다. 경험이 없다는 게 약점이 아니라 자유로 작동하는 드문 시기입니다.",
+r:"준비 없이 뛰어들어 대가를 치르는 국면입니다. 설렘과 충동을 구별해야 합니다."},
+{s:"major",n:"I",nm:"마법사",en:"The Magician",k:["의지","실행력","자원"],e:8,
+h:["필요한 건 이미 다 갖고 있다","말만 앞서 있다"],
+ad:["오늘 바로 하나를 실행하세요","말한 것 중 하나를 실제로 끝내세요"],
+u:"필요한 것이 이미 손안에 다 있습니다. 하겠다고 마음먹는 순간 움직이기 시작하는 판입니다.",
+r:"말과 계획만 앞서고 실행이 비어 있습니다. 재능을 잘못된 곳에 쓰고 있는지 점검해야 합니다."},
+{s:"major",n:"II",nm:"여사제",en:"The High Priestess",k:["직관","비밀","기다림"],e:6,
+h:["드러나지 않은 사정이 있다","감을 무시하고 있다"],
+ad:["결정을 하루 미루고 감을 살피세요","불편한 느낌의 이유를 적어보세요"],
+u:"드러난 정보보다 감이 정확한 국면입니다. 아직 말하지 않은 것, 숨겨진 사정이 판을 움직입니다.",
+r:"직관을 무시하거나, 반대로 비밀이 새어 나가 문제가 됩니다. 스스로에게 솔직하지 못한 지점이 있습니다."},
+{s:"major",n:"III",nm:"여황제",en:"The Empress",k:["풍요","돌봄","감각"],e:8,
+h:["자라고 있는 것이 있다","베풀다 내가 비었다"],
+ad:["재촉하지 말고 계속 돌보세요","내 몫을 먼저 챙기세요"],
+u:"자라나고 있는 것이 있습니다. 억지로 밀지 않고 돌보면 결실이 오는 흐름입니다.",
+r:"베푸는 쪽으로만 기울어 자신이 비어 갑니다. 과보호나 정체된 풍요일 수 있습니다."},
+{s:"major",n:"IV",nm:"황제",en:"The Emperor",k:["질서","권위","경계"],e:7,
+h:["규칙을 세운 사람이 이긴다","고집이 문제를 만든다"],
+ad:["기준을 문장으로 정해 붙이세요","한 가지는 상대 방식대로 해보세요"],
+u:"구조와 규칙이 답입니다. 원칙을 세우고 지키는 사람이 주도권을 갖습니다.",
+r:"통제가 과하거나, 반대로 기준이 없어 흔들립니다. 완고함이 문제를 만듭니다."},
+{s:"major",n:"V",nm:"교황",en:"The Hierophant",k:["전통","배움","제도"],e:6,
+h:["검증된 방법을 따르면 된다","틀에 억지로 맞추고 있다"],
+ad:["먼저 해본 사람에게 물어보세요","남의 기준 하나를 버리세요"],
+u:"이미 검증된 방식과 스승, 제도의 도움을 받을 때입니다. 혼자 새로 발명할 필요가 없습니다.",
+r:"틀에 맞지 않는 자리에 자신을 억지로 끼워 넣고 있습니다. 관습을 벗어나야 하는 순간입니다."},
+{s:"major",n:"VI",nm:"연인",en:"The Lovers",k:["선택","결합","가치"],e:7,
+h:["둘 중 하나를 골라야 한다","끌림과 옳음이 갈라졌다"],
+ad:["더 중요한 가치를 먼저 적으세요","미룬 대답을 이번 주에 하세요"],
+u:"마음이 끌리는 결합이자, 무엇을 더 중요하게 여기는지 드러나는 선택입니다. 둘 중 하나를 고르는 문제입니다.",
+r:"가치가 어긋나 있거나 결정을 미루고 있습니다. 끌림과 옳음이 갈라선 상태입니다."},
+{s:"major",n:"VII",nm:"전차",en:"The Chariot",k:["전진","의지","돌파"],e:8,
+h:["방향만 정하면 통과한다","힘이 사방으로 흩어진다"],
+ad:["목표 하나만 남기고 밀어붙이세요","속도를 줄이고 방향을 다시 보세요"],
+u:"방향을 정하고 밀어붙이면 통과합니다. 상반된 힘을 한 방향으로 묶어내는 능력이 관건입니다.",
+r:"에너지가 사방으로 흩어지거나 브레이크 없이 달립니다. 속도보다 방향을 먼저 봐야 합니다."},
+{s:"major",n:"VIII",nm:"힘",en:"Strength",k:["인내","부드러운 용기","길들임"],e:7,
+h:["버티는 힘으로 이긴다","참는 게 한계에 왔다"],
+ad:["매일 조금씩 반복하세요","쉬고, 참는 걸 하나 그만두세요"],
+u:"완력이 아니라 견디는 힘으로 이깁니다. 서두르지 않고 반복해서 다루면 사나운 것도 순해집니다.",
+r:"참는 것이 한계에 왔거나, 자신의 욕구를 억누르다 탈이 납니다. 자신감이 바닥난 상태입니다."},
+{s:"major",n:"IX",nm:"은둔자",en:"The Hermit",k:["성찰","고독","탐구"],e:5,
+h:["혼자 정리할 시간이 필요하다","혼자 있는 게 너무 길어졌다"],
+ad:["하루 조용히 혼자 생각하세요","사람을 만나 이야기하세요"],
+u:"물러나 혼자 생각할 시간이 필요합니다. 답은 밖의 소음이 아니라 정리된 내면에 있습니다.",
+r:"고립이 길어져 도움을 거절하고 있습니다. 이제는 나와서 사람을 만나야 합니다."},
+{s:"major",n:"X",nm:"운명의 수레바퀴",en:"Wheel of Fortune",k:["전환","순환","타이밍"],e:7,
+h:["판이 저절로 돌아간다","같은 패턴이 반복된다"],
+ad:["오는 변화에 몸을 실으세요","반복되는 지점 하나를 끊으세요"],
+u:"판이 저절로 돌아갑니다. 지금의 상태는 오래 유지되지 않으니, 오는 변화에 몸을 실으면 됩니다.",
+r:"흐름이 불리하게 돌거나 같은 패턴이 반복됩니다. 무엇이 순환을 만드는지 찾아야 합니다."},
+{s:"major",n:"XI",nm:"정의",en:"Justice",k:["균형","인과","책임"],e:6,
+h:["뿌린 대로 정확히 돌아온다","한쪽으로 기울어졌다"],
+ad:["감정 빼고 사실만 적어 판단하세요","내 편향을 인정하고 다시 재세요"],
+u:"뿌린 대로 정확히 돌아옵니다. 감정을 빼고 사실과 형평으로 판단할 때 문제가 풀립니다.",
+r:"한쪽으로 기울어진 결정, 회피한 책임이 걸려 있습니다. 편향을 인정하는 것이 첫 단계입니다."},
+{s:"major",n:"XII",nm:"매달린 사람",en:"The Hanged Man",k:["멈춤","관점 전환","유예"],e:4,
+h:["멈춰야 보이는 게 있다","멈춤이 미루기로 변했다"],
+ad:["결정을 잠시 내려놓으세요","오늘 작은 것 하나는 끝내세요"],
+u:"의도적으로 멈춰야 보이는 것이 있습니다. 지금의 정체는 낭비가 아니라 각도를 바꾸는 시간입니다.",
+r:"멈춤이 미루기로 변했습니다. 희생을 자처하며 아무 진전도 만들지 못하고 있습니다."},
+{s:"major",n:"XIII",nm:"죽음",en:"Death",k:["종결","정리","재생"],e:5,
+h:["끝나야 할 게 끝난다","끝난 걸 인정하지 못한다"],
+ad:["놓을 것 하나를 정해 정리하세요","끝났다고 소리 내어 말해보세요"],
+u:"끝나야 할 것이 끝납니다. 붙잡을수록 아프고, 놓으면 자리가 비어 다음 것이 들어옵니다.",
+r:"끝난 것을 끝났다고 인정하지 못해 오래 끌립니다. 변화에 대한 저항이 소모를 만듭니다."},
+{s:"major",n:"XIV",nm:"절제",en:"Temperance",k:["조율","중용","인내"],e:7,
+h:["극단이 아니라 배합의 문제다","한쪽으로 쏟아붓고 있다"],
+ad:["절반씩 나눠 시도하세요","넘치는 쪽을 줄이세요"],
+u:"극단이 아니라 배합의 문제입니다. 다른 성질을 천천히 섞어 알맞은 지점을 찾아가는 시기입니다.",
+r:"과하거나 부족합니다. 균형을 잃고 한쪽으로 쏟아부어 소진되고 있습니다."},
+{s:"major",n:"XV",nm:"악마",en:"The Devil",k:["집착","속박","욕망"],e:3,
+h:["알면서도 못 벗어난다","묶였던 게 풀리기 시작한다"],
+ad:["끊을 하나를 이번 주만 멈추세요","다시 손대지 않게 환경을 바꾸세요"],
+u:"알면서도 벗어나지 못하는 것이 있습니다. 사슬을 쥐고 있는 손이 실은 자기 손임을 보게 됩니다.",
+r:"묶여 있던 것에서 풀려나기 시작합니다. 무엇에 중독되어 있었는지 자각하는 단계입니다."},
+{s:"major",n:"XVI",nm:"탑",en:"The Tower",k:["붕괴","각성","급변"],e:3,
+h:["세워둔 전제가 무너진다","무너질 게 겨우 버틴다"],
+ad:["지킬 것과 버릴 것을 나누세요","미리 대비책 하나를 만드세요"],
+u:"세워둔 전제가 무너집니다. 아프지만 애초에 잘못 놓인 토대를 알려주는 사건입니다.",
+r:"무너질 것이 겨우 버티고 있거나, 이미 지난 충격의 여파를 정리하는 중입니다."},
+{s:"major",n:"XVII",nm:"별",en:"The Star",k:["희망","치유","회복"],e:9,
+h:["고비를 지나 맑아진다","기대를 잃었다"],
+ad:["회복을 재촉하지 말고 이어가세요","작게 기대할 것 하나를 정하세요"],
+u:"고비를 지난 뒤의 맑음입니다. 크게 극적이지 않지만 조용히 회복되고 방향이 보입니다.",
+r:"기대를 잃고 냉소로 기울었습니다. 혹은 근거 없는 낙관에 기대고 있습니다."},
+{s:"major",n:"XVIII",nm:"달",en:"The Moon",k:["불안","착각","무의식"],e:4,
+h:["보이는 게 전부가 아니다","안개가 걷힌다"],
+ad:["판단을 미루고 사실을 확인하세요","드러난 사실을 그대로 받아들이세요"],
+u:"보이는 것이 전부가 아니고, 두려움이 사실보다 커진 상태입니다. 판단을 서두르면 안 됩니다.",
+r:"안개가 걷히고 오해가 풀립니다. 숨겨져 있던 것이 드러나기 시작합니다."},
+{s:"major",n:"XIX",nm:"태양",en:"The Sun",k:["성공","명료","활력"],e:10,
+h:["숨길 것 없이 잘 된다","기쁨이 겉치레에 머문다"],
+ad:["드러내고 사람들과 나누세요","진짜 좋았던 순간을 하나 적으세요"],
+u:"숨길 것 없이 잘 되는 흐름입니다. 애매했던 것이 밝아지고 힘이 돌아옵니다.",
+r:"기쁨이 겉치레에 머물거나, 자신감이 과장으로 흐릅니다. 좋은 것을 온전히 누리지 못합니다."},
+{s:"major",n:"XX",nm:"심판",en:"Judgement",k:["부름","총결산","각성"],e:7,
+h:["지금까지 한 게 한꺼번에 계산된다","신호를 계속 무시하고 있다"],
+ad:["미뤄둔 결정을 이번에 내리세요","자기 비난을 멈추고 사실만 보세요"],
+u:"지금까지 해온 것이 한꺼번에 계산되는 지점입니다. 오래 미뤄둔 부름에 응답할 때입니다.",
+r:"자기 심판이 지나치게 가혹하거나, 결정적 신호를 계속 무시하고 있습니다."},
+{s:"major",n:"XXI",nm:"세계",en:"The World",k:["완성","통합","마무리"],e:10,
+h:["한 주기가 온전히 닫힌다","마지막을 못 닫고 있다"],
+ad:["마무리 문장을 쓰고 다음으로 넘어가세요","남은 한 가지를 끝내세요"],
+u:"한 주기가 온전히 닫힙니다. 흩어져 있던 조각이 하나로 맞물리며 다음 단계로 넘어갑니다.",
+r:"거의 다 왔는데 마지막을 못 닫고 있습니다. 미련이 마침표를 늦춥니다."},
 
-{s:"wands",n:"에이스",nm:"완드 에이스",en:"Ace of Wands",k:["착화","기회","의욕"],u:"불이 붙는 순간입니다. 아이디어와 의욕이 동시에 올라오니 첫 삽을 뜨기에 좋습니다.",r:"의욕이 붙었다 꺼집니다. 시작할 힘은 있는데 방향이 없습니다."},
-{s:"wands",n:"2",nm:"완드 2",en:"Two of Wands",k:["계획","전망","결단 전"],u:"멀리 내다보며 다음 수를 재는 자리입니다. 지도는 다 그렸으니 떠날지를 정해야 합니다.",r:"계획만 길어지고 발을 떼지 못합니다. 안전한 자리에서 미룹니다."},
-{s:"wands",n:"3",nm:"완드 3",en:"Three of Wands",k:["확장","기다림","시야"],u:"뿌린 것이 밖으로 뻗어 나갑니다. 범위를 넓히고 소식을 기다릴 시기입니다.",r:"기대했던 확장이 지체됩니다. 시야가 좁아 기회를 놓칩니다."},
-{s:"wands",n:"4",nm:"완드 4",en:"Four of Wands",k:["안정","축하","자리 잡음"],u:"한 단계를 무사히 마치고 자리가 잡힙니다. 함께 기뻐할 일이 생기는 흐름입니다.",r:"기반이 아직 불안하거나 소속감이 흔들립니다. 축하가 미뤄집니다."},
-{s:"wands",n:"5",nm:"완드 5",en:"Five of Wands",k:["경쟁","마찰","혼전"],u:"여럿이 부딪히며 소란한 국면입니다. 악의보다 각자의 의욕이 엉킨 상태입니다.",r:"경쟁을 회피하거나, 갈등이 물밑으로 가라앉아 더 오래 갑니다."},
-{s:"wands",n:"6",nm:"완드 6",en:"Six of Wands",k:["인정","성과","자신감"],u:"노력이 눈에 보이게 인정받습니다. 앞에 나서도 되는 시기입니다.",r:"인정에 목이 마르거나, 성과를 과장하다 신뢰를 잃습니다."},
-{s:"wands",n:"7",nm:"완드 7",en:"Seven of Wands",k:["방어","고수","버티기"],u:"얻은 것을 지키느라 힘이 듭니다. 물러서지 않는 것 자체가 지금의 과제입니다.",r:"혼자 다 막으려다 지쳤습니다. 지킬 가치가 있는지 다시 볼 때입니다."},
-{s:"wands",n:"8",nm:"완드 8",en:"Eight of Wands",k:["속도","전개","소식"],u:"일이 빠르게 굴러갑니다. 지체됐던 것이 한꺼번에 움직이고 소식이 옵니다.",r:"진행이 막히거나 순서가 엉킵니다. 급하게 서두르다 놓칩니다."},
-{s:"wands",n:"9",nm:"완드 9",en:"Nine of Wands",k:["끈기","경계","마지막 고비"],u:"많이 맞아 지쳤지만 아직 서 있습니다. 한 걸음만 더 남은 지점입니다.",r:"방어가 습관이 되어 아무도 들이지 않습니다. 소진이 한계에 왔습니다."},
-{s:"wands",n:"10",nm:"완드 10",en:"Ten of Wands",k:["과부하","책임","막바지"],u:"짐이 너무 많지만 목적지는 보입니다. 다 안고 가려는 태도가 문제의 절반입니다.",r:"내려놓기 시작합니다. 혹은 버티다 무너집니다. 덜어내는 것이 유일한 길입니다."},
-{s:"wands",n:"시종",nm:"완드 시종",en:"Page of Wands",k:["열의","탐색","미숙"],u:"새로운 것에 눈이 반짝이는 상태입니다. 서툴러도 뛰어드는 태도가 자산입니다.",r:"흥미가 금방 식고 산만합니다. 계획 없이 소식만 기다립니다."},
-{s:"wands",n:"기사",nm:"완드 기사",en:"Knight of Wands",k:["돌진","모험","성급함"],u:"망설임 없이 달려드는 힘입니다. 속도가 필요한 국면에서 가장 잘 통합니다.",r:"충동이 사고를 만듭니다. 시작만 하고 마무리를 남깁니다."},
-{s:"wands",n:"여왕",nm:"완드 여왕",en:"Queen of Wands",k:["자신감","매력","주도"],u:"자기 색이 뚜렷해 사람이 따라옵니다. 따뜻하면서도 물러서지 않는 힘입니다.",r:"질투나 과시로 기울고, 인정받지 못할 때 예민해집니다."},
-{s:"wands",n:"왕",nm:"완드 왕",en:"King of Wands",k:["비전","리더십","추진"],u:"큰 그림을 그리고 사람을 움직이는 자리입니다. 결정하고 책임지면 판이 열립니다.",r:"독선과 성급한 명령으로 신뢰를 깎습니다. 말만 크고 실행이 얕습니다."},
+{s:"wands",n:"에이스",nm:"완드 에이스",en:"Ace of Wands",k:["착화","기회","의욕"],e:8,
+h:["불이 붙는 순간이다","의욕이 붙었다 꺼진다"],
+ad:["오늘 첫 삽을 뜨세요","작게 쪼개 하나만 시작하세요"],
+u:"불이 붙는 순간입니다. 아이디어와 의욕이 동시에 올라오니 첫 삽을 뜨기에 좋습니다.",
+r:"의욕이 붙었다 꺼집니다. 시작할 힘은 있는데 방향이 없습니다."},
+{s:"wands",n:"2",nm:"완드 2",en:"Two of Wands",k:["계획","전망","결단 전"],e:6,
+h:["다음 수를 재는 중이다","계획만 길어진다"],
+ad:["떠날 날짜를 정하세요","오늘 한 걸음만 실제로 옮기세요"],
+u:"멀리 내다보며 다음 수를 재는 자리입니다. 지도는 다 그렸으니 떠날지를 정해야 합니다.",
+r:"계획만 길어지고 발을 떼지 못합니다. 안전한 자리에서 미룹니다."},
+{s:"wands",n:"3",nm:"완드 3",en:"Three of Wands",k:["확장","기다림","시야"],e:7,
+h:["밖으로 뻗어 나간다","확장이 지체된다"],
+ad:["범위를 한 칸 넓히세요","기다리는 동안 준비를 채우세요"],
+u:"뿌린 것이 밖으로 뻗어 나갑니다. 범위를 넓히고 소식을 기다릴 시기입니다.",
+r:"기대했던 확장이 지체됩니다. 시야가 좁아 기회를 놓칩니다."},
+{s:"wands",n:"4",nm:"완드 4",en:"Four of Wands",k:["안정","축하","자리 잡음"],e:9,
+h:["한 단계가 무사히 자리 잡는다","기반이 아직 불안하다"],
+ad:["함께 기뻐하고 넘어가세요","기초 하나를 더 단단히 하세요"],
+u:"한 단계를 무사히 마치고 자리가 잡힙니다. 함께 기뻐할 일이 생기는 흐름입니다.",
+r:"기반이 아직 불안하거나 소속감이 흔들립니다. 축하가 미뤄집니다."},
+{s:"wands",n:"5",nm:"완드 5",en:"Five of Wands",k:["경쟁","마찰","혼전"],e:4,
+h:["여럿이 부딪혀 소란하다","갈등이 물밑으로 가라앉았다"],
+ad:["싸울 것과 넘길 것을 나누세요","덮어둔 말을 꺼내세요"],
+u:"여럿이 부딪히며 소란한 국면입니다. 악의보다 각자의 의욕이 엉킨 상태입니다.",
+r:"경쟁을 회피하거나, 갈등이 물밑으로 가라앉아 더 오래 갑니다."},
+{s:"wands",n:"6",nm:"완드 6",en:"Six of Wands",k:["인정","성과","자신감"],e:9,
+h:["노력이 눈에 보이게 인정받는다","인정에 목이 말랐다"],
+ad:["앞에 나서서 보여주세요","남의 시선 말고 내 기준을 세우세요"],
+u:"노력이 눈에 보이게 인정받습니다. 앞에 나서도 되는 시기입니다.",
+r:"인정에 목이 마르거나, 성과를 과장하다 신뢰를 잃습니다."},
+{s:"wands",n:"7",nm:"완드 7",en:"Seven of Wands",k:["방어","고수","버티기"],e:5,
+h:["지키느라 힘이 든다","혼자 다 막으려다 지쳤다"],
+ad:["가장 중요한 하나만 지키세요","도움을 청하세요"],
+u:"얻은 것을 지키느라 힘이 듭니다. 물러서지 않는 것 자체가 지금의 과제입니다.",
+r:"혼자 다 막으려다 지쳤습니다. 지킬 가치가 있는지 다시 볼 때입니다."},
+{s:"wands",n:"8",nm:"완드 8",en:"Eight of Wands",k:["속도","전개","소식"],e:8,
+h:["일이 빠르게 굴러간다","진행이 막히고 순서가 엉킨다"],
+ad:["속도를 살려 바로 답하세요","순서를 다시 적고 하나씩 하세요"],
+u:"일이 빠르게 굴러갑니다. 지체됐던 것이 한꺼번에 움직이고 소식이 옵니다.",
+r:"진행이 막히거나 순서가 엉킵니다. 급하게 서두르다 놓칩니다."},
+{s:"wands",n:"9",nm:"완드 9",en:"Nine of Wands",k:["끈기","경계","마지막 고비"],e:5,
+h:["지쳤지만 아직 서 있다","방어가 습관이 됐다"],
+ad:["한 걸음만 더 가세요","오늘은 쉬고 문을 열어두세요"],
+u:"많이 맞아 지쳤지만 아직 서 있습니다. 한 걸음만 더 남은 지점입니다.",
+r:"방어가 습관이 되어 아무도 들이지 않습니다. 소진이 한계에 왔습니다."},
+{s:"wands",n:"10",nm:"완드 10",en:"Ten of Wands",k:["과부하","책임","막바지"],e:4,
+h:["짐이 너무 많다","내려놓기 시작한다"],
+ad:["남에게 넘길 하나를 정하세요","목록에서 두 개를 지우세요"],
+u:"짐이 너무 많지만 목적지는 보입니다. 다 안고 가려는 태도가 문제의 절반입니다.",
+r:"내려놓기 시작합니다. 혹은 버티다 무너집니다. 덜어내는 것이 유일한 길입니다."},
+{s:"wands",n:"시종",nm:"완드 시종",en:"Page of Wands",k:["열의","탐색","미숙"],e:7,
+h:["새로운 것에 눈이 반짝인다","흥미가 금방 식는다"],
+ad:["서툴러도 일단 해보세요","기한을 정해 하나만 끝내세요"],
+u:"새로운 것에 눈이 반짝이는 상태입니다. 서툴러도 뛰어드는 태도가 자산입니다.",
+r:"흥미가 금방 식고 산만합니다. 계획 없이 소식만 기다립니다."},
+{s:"wands",n:"기사",nm:"완드 기사",en:"Knight of Wands",k:["돌진","모험","성급함"],e:7,
+h:["망설임 없이 달려든다","충동이 사고를 만든다"],
+ad:["지금 속도를 유지하세요","보내기 전에 한 번 멈추세요"],
+u:"망설임 없이 달려드는 힘입니다. 속도가 필요한 국면에서 가장 잘 통합니다.",
+r:"충동이 사고를 만듭니다. 시작만 하고 마무리를 남깁니다."},
+{s:"wands",n:"여왕",nm:"완드 여왕",en:"Queen of Wands",k:["자신감","매력","주도"],e:8,
+h:["자기 색이 뚜렷해 사람이 따라온다","인정받지 못하면 예민해진다"],
+ad:["내 방식대로 이끄세요","비교를 멈추고 내 것에 집중하세요"],
+u:"자기 색이 뚜렷해 사람이 따라옵니다. 따뜻하면서도 물러서지 않는 힘입니다.",
+r:"질투나 과시로 기울고, 인정받지 못할 때 예민해집니다."},
+{s:"wands",n:"왕",nm:"완드 왕",en:"King of Wands",k:["비전","리더십","추진"],e:8,
+h:["결정하고 책임지면 판이 열린다","말만 크고 실행이 얕다"],
+ad:["결정을 내리고 알리세요","약속한 것부터 지키세요"],
+u:"큰 그림을 그리고 사람을 움직이는 자리입니다. 결정하고 책임지면 판이 열립니다.",
+r:"독선과 성급한 명령으로 신뢰를 깎습니다. 말만 크고 실행이 얕습니다."},
 
-{s:"cups",n:"에이스",nm:"컵 에이스",en:"Ace of Cups",k:["감정의 시작","호의","열림"],u:"마음이 열리는 순간입니다. 새로운 애정이나 화해의 물길이 시작됩니다.",r:"감정을 닫아두거나 표현하지 못합니다. 마음이 새어 흘러버립니다."},
-{s:"cups",n:"2",nm:"컵 2",en:"Two of Cups",k:["교류","상호성","약속"],u:"주고받는 균형이 맞는 관계입니다. 한쪽으로 기울지 않은 결합입니다.",r:"한쪽만 기울어졌거나 신뢰에 금이 갔습니다. 균형을 다시 맞춰야 합니다."},
-{s:"cups",n:"3",nm:"컵 3",en:"Three of Cups",k:["우정","축하","모임"],u:"사람들 사이에서 기쁨이 늘어납니다. 함께하면 더 잘되는 시기입니다.",r:"모임이 소모가 되거나 관계에 삼각 구도가 생깁니다."},
-{s:"cups",n:"4",nm:"컵 4",en:"Four of Cups",k:["권태","무관심","내향"],u:"눈앞의 것에 흥미가 없습니다. 이미 놓여 있는 기회를 보지 않고 있습니다.",r:"권태에서 빠져나와 다시 관심이 생깁니다. 제안을 받아들일 때입니다."},
-{s:"cups",n:"5",nm:"컵 5",en:"Five of Cups",k:["상실","후회","애도"],u:"잃은 것에 시선이 붙어 있습니다. 남아 있는 것이 뒤에 있는데 아직 돌아보지 못합니다.",r:"애도가 끝나고 고개를 듭니다. 남은 것을 세기 시작합니다."},
-{s:"cups",n:"6",nm:"컵 6",en:"Six of Cups",k:["추억","익숙함","순수"],u:"지난 인연과 익숙한 온기가 힘이 됩니다. 옛것에서 도움이 옵니다.",r:"과거에 발이 묶여 현재를 살지 못합니다. 향수가 판단을 흐립니다."},
-{s:"cups",n:"7",nm:"컵 7",en:"Seven of Cups",k:["환상","선택지","현혹"],u:"고를 것이 많아 보이지만 대부분 실체가 없습니다. 무엇이 진짜인지 가려야 합니다.",r:"환상이 걷히고 현실적인 하나를 잡습니다. 정신이 돌아옵니다."},
-{s:"cups",n:"8",nm:"컵 8",en:"Eight of Cups",k:["떠남","단념","전환"],u:"나쁘지 않은데도 더는 여기가 아닙니다. 등을 돌리고 걸어 나갈 시기입니다.",r:"떠나야 함을 알면서 못 떠나고 미련에 머무릅니다."},
-{s:"cups",n:"9",nm:"컵 9",en:"Nine of Cups",k:["만족","소원","충족"],u:"바랐던 것이 실제로 채워집니다. 누려도 되는 시기입니다.",r:"채워도 허합니다. 원한 것이 정말 원한 것이었는지 물어야 합니다."},
-{s:"cups",n:"10",nm:"컵 10",en:"Ten of Cups",k:["화목","완성된 관계","안정"],u:"관계에서 오는 안정이 자리 잡습니다. 오래 갈 형태가 만들어집니다.",r:"겉으로는 화목하지만 안이 비어 있습니다. 이상과 현실이 어긋납니다."},
-{s:"cups",n:"시종",nm:"컵 시종",en:"Page of Cups",k:["설렘","제안","감수성"],u:"뜻밖의 호의나 소식이 옵니다. 순수하게 받아들이면 좋은 흐름입니다.",r:"감정 과잉이나 미성숙한 반응이 문제입니다. 상처를 쉽게 받습니다."},
-{s:"cups",n:"기사",nm:"컵 기사",en:"Knight of Cups",k:["구애","낭만","진심"],u:"마음을 표현하며 다가가는 자리입니다. 정성이 통하는 국면입니다.",r:"말뿐인 낭만이거나 감정에 취해 현실을 봅니다. 변덕이 신뢰를 깎습니다."},
-{s:"cups",n:"여왕",nm:"컵 여왕",en:"Queen of Cups",k:["공감","보살핌","직관"],u:"상대의 마음을 읽고 품는 힘입니다. 조용한 지지가 판을 바꿉니다.",r:"남의 감정에 휩쓸려 자기를 잃습니다. 경계가 필요합니다."},
-{s:"cups",n:"왕",nm:"컵 왕",en:"King of Cups",k:["성숙","포용","절제된 감정"],u:"감정을 알면서도 흔들리지 않는 자리입니다. 조율하고 감싸는 사람이 중심을 잡습니다.",r:"감정을 억누르다 어느 순간 터집니다. 겉은 평온하고 안은 요동칩니다."},
+{s:"cups",n:"에이스",nm:"컵 에이스",en:"Ace of Cups",k:["감정의 시작","호의","열림"],e:9,
+h:["마음이 열리는 순간이다","마음을 닫아두었다"],
+ad:["먼저 마음을 표현하세요","솔직한 한 문장을 보내세요"],
+u:"마음이 열리는 순간입니다. 새로운 애정이나 화해의 물길이 시작됩니다.",
+r:"감정을 닫아두거나 표현하지 못합니다. 마음이 새어 흘러버립니다."},
+{s:"cups",n:"2",nm:"컵 2",en:"Two of Cups",k:["교류","상호성","약속"],e:9,
+h:["주고받는 균형이 맞다","한쪽으로 기울었다"],
+ad:["고맙다고 말로 전하세요","서로 바라는 걸 확인하세요"],
+u:"주고받는 균형이 맞는 관계입니다. 한쪽으로 기울지 않은 결합입니다.",
+r:"한쪽만 기울어졌거나 신뢰에 금이 갔습니다. 균형을 다시 맞춰야 합니다."},
+{s:"cups",n:"3",nm:"컵 3",en:"Three of Cups",k:["우정","축하","모임"],e:8,
+h:["사람들 사이에서 기쁨이 늘어난다","모임이 소모가 된다"],
+ad:["사람들과 함께하세요","거리를 두어야 할 관계를 정하세요"],
+u:"사람들 사이에서 기쁨이 늘어납니다. 함께하면 더 잘되는 시기입니다.",
+r:"모임이 소모가 되거나 관계에 삼각 구도가 생깁니다."},
+{s:"cups",n:"4",nm:"컵 4",en:"Four of Cups",k:["권태","무관심","내향"],e:4,
+h:["눈앞의 것에 흥미가 없다","다시 관심이 생긴다"],
+ad:["이미 온 기회를 다시 보세요","들어온 제안을 받아들이세요"],
+u:"눈앞의 것에 흥미가 없습니다. 이미 놓여 있는 기회를 보지 않고 있습니다.",
+r:"권태에서 빠져나와 다시 관심이 생깁니다. 제안을 받아들일 때입니다."},
+{s:"cups",n:"5",nm:"컵 5",en:"Five of Cups",k:["상실","후회","애도"],e:3,
+h:["잃은 것만 보인다","고개를 들기 시작한다"],
+ad:["남아 있는 것 세 개를 적으세요","다음으로 옮겨갈 준비를 하세요"],
+u:"잃은 것에 시선이 붙어 있습니다. 남아 있는 것이 뒤에 있는데 아직 돌아보지 못합니다.",
+r:"애도가 끝나고 고개를 듭니다. 남은 것을 세기 시작합니다."},
+{s:"cups",n:"6",nm:"컵 6",en:"Six of Cups",k:["추억","익숙함","순수"],e:7,
+h:["익숙한 온기가 힘이 된다","과거에 발이 묶였다"],
+ad:["옛 인연에게 연락하세요","지금 할 일 하나로 시선을 옮기세요"],
+u:"지난 인연과 익숙한 온기가 힘이 됩니다. 옛것에서 도움이 옵니다.",
+r:"과거에 발이 묶여 현재를 살지 못합니다. 향수가 판단을 흐립니다."},
+{s:"cups",n:"7",nm:"컵 7",en:"Seven of Cups",k:["환상","선택지","현혹"],e:4,
+h:["고를 게 많아 보이지만 대부분 허상이다","환상이 걷히고 하나를 잡는다"],
+ad:["선택지를 세 개로 줄이세요","고른 하나에 집중하세요"],
+u:"고를 것이 많아 보이지만 대부분 실체가 없습니다. 무엇이 진짜인지 가려야 합니다.",
+r:"환상이 걷히고 현실적인 하나를 잡습니다. 정신이 돌아옵니다."},
+{s:"cups",n:"8",nm:"컵 8",en:"Eight of Cups",k:["떠남","단념","전환"],e:5,
+h:["더는 여기가 아니다","떠나야 함을 알면서 못 떠난다"],
+ad:["떠날 준비를 시작하세요","떠날 조건을 하나 정하세요"],
+u:"나쁘지 않은데도 더는 여기가 아닙니다. 등을 돌리고 걸어 나갈 시기입니다.",
+r:"떠나야 함을 알면서 못 떠나고 미련에 머무릅니다."},
+{s:"cups",n:"9",nm:"컵 9",en:"Nine of Cups",k:["만족","소원","충족"],e:9,
+h:["바랐던 게 실제로 채워진다","채워도 허하다"],
+ad:["누리고 감사하세요","진짜 원하는 걸 다시 적으세요"],
+u:"바랐던 것이 실제로 채워집니다. 누려도 되는 시기입니다.",
+r:"채워도 허합니다. 원한 것이 정말 원한 것이었는지 물어야 합니다."},
+{s:"cups",n:"10",nm:"컵 10",en:"Ten of Cups",k:["화목","완성된 관계","안정"],e:10,
+h:["오래 갈 형태가 만들어진다","겉은 화목하고 안은 비었다"],
+ad:["이 관계에 시간을 더 쓰세요","솔직한 대화를 한 번 하세요"],
+u:"관계에서 오는 안정이 자리 잡습니다. 오래 갈 형태가 만들어집니다.",
+r:"겉으로는 화목하지만 안이 비어 있습니다. 이상과 현실이 어긋납니다."},
+{s:"cups",n:"시종",nm:"컵 시종",en:"Page of Cups",k:["설렘","제안","감수성"],e:7,
+h:["뜻밖의 호의나 소식이 온다","감정이 넘쳐 흔들린다"],
+ad:["순수하게 받아들이세요","반응하기 전에 하루 두세요"],
+u:"뜻밖의 호의나 소식이 옵니다. 순수하게 받아들이면 좋은 흐름입니다.",
+r:"감정 과잉이나 미성숙한 반응이 문제입니다. 상처를 쉽게 받습니다."},
+{s:"cups",n:"기사",nm:"컵 기사",en:"Knight of Cups",k:["구애","낭만","진심"],e:7,
+h:["마음을 표현하며 다가간다","말뿐인 낭만이다"],
+ad:["정성껏 표현하세요","말한 것을 행동으로 보이세요"],
+u:"마음을 표현하며 다가가는 자리입니다. 정성이 통하는 국면입니다.",
+r:"말뿐인 낭만이거나 감정에 취해 현실을 놓칩니다. 변덕이 신뢰를 깎습니다."},
+{s:"cups",n:"여왕",nm:"컵 여왕",en:"Queen of Cups",k:["공감","보살핌","직관"],e:8,
+h:["상대 마음을 읽고 품는다","남의 감정에 휩쓸린다"],
+ad:["조용히 지지해 주세요","내 감정과 남의 감정을 나누세요"],
+u:"상대의 마음을 읽고 품는 힘입니다. 조용한 지지가 판을 바꿉니다.",
+r:"남의 감정에 휩쓸려 자기를 잃습니다. 경계가 필요합니다."},
+{s:"cups",n:"왕",nm:"컵 왕",en:"King of Cups",k:["성숙","포용","절제된 감정"],e:8,
+h:["감정을 알면서도 흔들리지 않는다","억눌렀다가 터진다"],
+ad:["중심을 잡고 감싸세요","쌓인 말을 조금씩 꺼내세요"],
+u:"감정을 알면서도 흔들리지 않는 자리입니다. 조율하고 감싸는 사람이 중심을 잡습니다.",
+r:"감정을 억누르다 어느 순간 터집니다. 겉은 평온하고 안은 요동칩니다."},
 
-{s:"swords",n:"에이스",nm:"소드 에이스",en:"Ace of Swords",k:["명료","진실","돌파"],u:"흐릿했던 것이 한 번에 정리됩니다. 정확한 말과 결단이 길을 엽니다.",r:"판단이 흐리거나, 날카로운 말이 상처만 냅니다. 사실 확인이 먼저입니다."},
-{s:"swords",n:"2",nm:"소드 2",en:"Two of Swords",k:["교착","보류","외면"],u:"결정을 미룬 채 눈을 감고 있습니다. 정보가 부족한 게 아니라 보기를 피하는 상태입니다.",r:"막힌 것이 풀리며 결정이 내려집니다. 외면했던 사실을 마주합니다."},
-{s:"swords",n:"3",nm:"소드 3",en:"Three of Swords",k:["상처","진실의 아픔","이별"],u:"아픈 사실이 정확히 꽂힙니다. 부정할 수 없어서 아프고, 그래서 정리가 시작됩니다.",r:"상처가 아물어 갑니다. 혹은 아픔을 붙잡고 계속 눌러 봅니다."},
-{s:"swords",n:"4",nm:"소드 4",en:"Four of Swords",k:["휴식","회복","중지"],u:"싸움을 멈추고 쉬어야 회복됩니다. 지금의 정지는 후퇴가 아니라 정비입니다.",r:"쉬어야 하는데 못 쉽니다. 혹은 너무 오래 멈춰 있었습니다."},
-{s:"swords",n:"5",nm:"소드 5",en:"Five of Swords",k:["상처뿐인 승리","갈등","자존심"],u:"이겨도 남는 것이 별로 없습니다. 무엇을 잃고 이기는지 세어봐야 합니다.",r:"갈등을 끝내고 화해로 돌아섭니다. 이기려는 마음을 놓습니다."},
-{s:"swords",n:"6",nm:"소드 6",en:"Six of Swords",k:["이동","벗어남","전환"],u:"어려운 자리를 조용히 떠나 나아갑니다. 요란하지 않지만 확실한 전환입니다.",r:"떠나지 못하고 같은 자리를 돕니다. 짐을 그대로 안고 갑니다."},
-{s:"swords",n:"7",nm:"소드 7",en:"Seven of Swords",k:["기만","은밀함","우회"],u:"정면 승부 대신 빠져나가는 수를 씁니다. 누군가 다 말하지 않고 있습니다.",r:"숨긴 것이 드러납니다. 혹은 이제 솔직해지기로 합니다."},
-{s:"swords",n:"8",nm:"소드 8",en:"Eight of Swords",k:["속박감","무력","자기 제한"],u:"꼼짝 못 한다고 느끼지만 실제 매듭은 생각만큼 단단하지 않습니다. 스스로 눈을 가린 부분이 있습니다.",r:"묶인 것이 풀리기 시작합니다. 할 수 있는 일이 보입니다."},
-{s:"swords",n:"9",nm:"소드 9",en:"Nine of Swords",k:["불안","걱정","자책"],u:"밤에 커지는 걱정이 실제 문제보다 큽니다. 두려움이 사실을 대신하고 있습니다.",r:"불안이 가라앉고 잠이 돌아옵니다. 걱정을 말로 꺼낼 때입니다."},
-{s:"swords",n:"10",nm:"소드 10",en:"Ten of Swords",k:["종결","바닥","항복"],u:"더 나빠질 데가 없는 지점입니다. 끝났음을 인정하는 순간 회복이 시작됩니다.",r:"바닥을 지나 일어섭니다. 최악은 지나갔습니다."},
-{s:"swords",n:"시종",nm:"소드 시종",en:"Page of Swords",k:["호기심","관찰","말"],u:"묻고 캐고 배우는 자리입니다. 정보를 모으는 것이 지금의 일입니다.",r:"말이 앞서고 뒷말이 돕니다. 어설픈 정보로 판단합니다."},
-{s:"swords",n:"기사",nm:"소드 기사",en:"Knight of Swords",k:["직진","속도","공격"],u:"거침없이 밀고 들어갑니다. 빠른 결단이 필요한 국면에서 강합니다.",r:"성급함이 일을 망칩니다. 말이 칼이 되어 관계를 자릅니다."},
-{s:"swords",n:"여왕",nm:"소드 여왕",en:"Queen of Swords",k:["명석함","선 긋기","독립"],u:"감정을 걷어내고 사실로 판단합니다. 냉정한 선 긋기가 스스로를 지킵니다.",r:"냉담함이 벽이 됩니다. 비판이 습관이 되어 사람을 밀어냅니다."},
-{s:"swords",n:"왕",nm:"소드 왕",en:"King of Swords",k:["원칙","판단","권위"],u:"논리와 원칙으로 결론을 내는 자리입니다. 조언을 구할 사람이 필요한 시기입니다.",r:"권위를 앞세우고 말로 지배합니다. 원칙이 경직으로 굳었습니다."},
+{s:"swords",n:"에이스",nm:"소드 에이스",en:"Ace of Swords",k:["명료","진실","돌파"],e:7,
+h:["흐릿했던 게 한 번에 정리된다","판단이 흐리다"],
+ad:["결론을 한 문장으로 말하세요","사실 확인부터 하세요"],
+u:"흐릿했던 것이 한 번에 정리됩니다. 정확한 말과 결단이 길을 엽니다.",
+r:"판단이 흐리거나, 날카로운 말이 상처만 냅니다. 사실 확인이 먼저입니다."},
+{s:"swords",n:"2",nm:"소드 2",en:"Two of Swords",k:["교착","보류","외면"],e:4,
+h:["보기를 피하고 있다","막힌 게 풀려 결정된다"],
+ad:["눈을 뜨고 양쪽을 적어 비교하세요","정한 것을 상대에게 알리세요"],
+u:"결정을 미룬 채 눈을 감고 있습니다. 정보가 부족한 게 아니라 보기를 피하는 상태입니다.",
+r:"막힌 것이 풀리며 결정이 내려집니다. 외면했던 사실을 마주합니다."},
+{s:"swords",n:"3",nm:"소드 3",en:"Three of Swords",k:["상처","진실의 아픔","이별"],e:2,
+h:["아픈 사실이 정확히 꽂힌다","상처가 아물어간다"],
+ad:["아픔을 부정하지 말고 말하세요","다 나을 때까지 새 일은 미루세요"],
+u:"아픈 사실이 정확히 꽂힙니다. 부정할 수 없어서 아프고, 그래서 정리가 시작됩니다.",
+r:"상처가 아물어 갑니다. 혹은 아픔을 붙잡고 계속 눌러 봅니다."},
+{s:"swords",n:"4",nm:"소드 4",en:"Four of Swords",k:["휴식","회복","중지"],e:6,
+h:["멈추고 쉬어야 회복된다","쉬어야 하는데 못 쉰다"],
+ad:["일정 하나를 비우고 쉬세요","오늘 잠을 먼저 챙기세요"],
+u:"싸움을 멈추고 쉬어야 회복됩니다. 지금의 정지는 후퇴가 아니라 정비입니다.",
+r:"쉬어야 하는데 못 쉽니다. 혹은 너무 오래 멈춰 있었습니다."},
+{s:"swords",n:"5",nm:"소드 5",en:"Five of Swords",k:["상처뿐인 승리","갈등","자존심"],e:3,
+h:["이겨도 남는 게 없다","이기려는 마음을 놓는다"],
+ad:["이길 가치가 있는지 따지세요","먼저 손을 내미세요"],
+u:"이겨도 남는 것이 별로 없습니다. 무엇을 잃고 이기는지 세어봐야 합니다.",
+r:"갈등을 끝내고 화해로 돌아섭니다. 이기려는 마음을 놓습니다."},
+{s:"swords",n:"6",nm:"소드 6",en:"Six of Swords",k:["이동","벗어남","전환"],e:6,
+h:["어려운 자리를 떠나 나아간다","같은 자리를 돌고 있다"],
+ad:["조용히 정리하고 옮기세요","놓고 갈 짐 하나를 정하세요"],
+u:"어려운 자리를 조용히 떠나 나아갑니다. 요란하지 않지만 확실한 전환입니다.",
+r:"떠나지 못하고 같은 자리를 돕니다. 짐을 그대로 안고 갑니다."},
+{s:"swords",n:"7",nm:"소드 7",en:"Seven of Swords",k:["기만","은밀함","우회"],e:4,
+h:["누가 다 말하지 않고 있다","숨긴 게 드러난다"],
+ad:["앞뒤가 안 맞는 부분을 확인하세요","솔직하게 먼저 밝히세요"],
+u:"정면 승부 대신 빠져나가는 수를 씁니다. 누군가 다 말하지 않고 있습니다.",
+r:"숨긴 것이 드러납니다. 혹은 이제 솔직해지기로 합니다."},
+{s:"swords",n:"8",nm:"소드 8",en:"Eight of Swords",k:["속박감","무력","자기 제한"],e:3,
+h:["못 움직인다고 느끼지만 매듭은 약하다","묶인 게 풀리기 시작한다"],
+ad:["할 수 있는 일 하나를 적어 하세요","작은 자유를 하나 되찾으세요"],
+u:"꼼짝 못 한다고 느끼지만 실제 매듭은 생각만큼 단단하지 않습니다. 스스로 눈을 가린 부분이 있습니다.",
+r:"묶인 것이 풀리기 시작합니다. 할 수 있는 일이 보입니다."},
+{s:"swords",n:"9",nm:"소드 9",en:"Nine of Swords",k:["불안","걱정","자책"],e:2,
+h:["걱정이 실제보다 커졌다","불안이 가라앉는다"],
+ad:["걱정을 다 적어 사실과 나누세요","믿는 사람에게 말하세요"],
+u:"밤에 커지는 걱정이 실제 문제보다 큽니다. 두려움이 사실을 대신하고 있습니다.",
+r:"불안이 가라앉고 잠이 돌아옵니다. 걱정을 말로 꺼낼 때입니다."},
+{s:"swords",n:"10",nm:"소드 10",en:"Ten of Swords",k:["종결","바닥","항복"],e:2,
+h:["더 나빠질 데가 없다","바닥을 지나 일어선다"],
+ad:["끝났음을 인정하고 쉬세요","작은 것부터 다시 시작하세요"],
+u:"더 나빠질 데가 없는 지점입니다. 끝났음을 인정하는 순간 회복이 시작됩니다.",
+r:"바닥을 지나 일어섭니다. 최악은 지나갔습니다."},
+{s:"swords",n:"시종",nm:"소드 시종",en:"Page of Swords",k:["호기심","관찰","말"],e:6,
+h:["묻고 캐고 배우는 중이다","말이 앞서고 뒷말이 돈다"],
+ad:["질문을 다섯 개 적어 확인하세요","확인 전엔 말하지 마세요"],
+u:"묻고 캐고 배우는 자리입니다. 정보를 모으는 것이 지금의 일입니다.",
+r:"말이 앞서고 뒷말이 돕니다. 어설픈 정보로 판단합니다."},
+{s:"swords",n:"기사",nm:"소드 기사",en:"Knight of Swords",k:["직진","속도","공격"],e:6,
+h:["거침없이 밀고 들어간다","성급함이 일을 망친다"],
+ad:["빠른 결단으로 승부하세요","보내기 전 한 번 다시 읽으세요"],
+u:"거침없이 밀고 들어갑니다. 빠른 결단이 필요한 국면에서 강합니다.",
+r:"성급함이 일을 망칩니다. 말이 칼이 되어 관계를 자릅니다."},
+{s:"swords",n:"여왕",nm:"소드 여왕",en:"Queen of Swords",k:["명석함","선 긋기","독립"],e:7,
+h:["감정을 걷고 사실로 판단한다","냉담함이 벽이 된다"],
+ad:["선을 분명히 그으세요","따뜻한 말 한마디를 더하세요"],
+u:"감정을 걷어내고 사실로 판단합니다. 냉정한 선 긋기가 스스로를 지킵니다.",
+r:"냉담함이 벽이 됩니다. 비판이 습관이 되어 사람을 밀어냅니다."},
+{s:"swords",n:"왕",nm:"소드 왕",en:"King of Swords",k:["원칙","판단","권위"],e:7,
+h:["논리와 원칙으로 결론을 낸다","권위로 밀어붙인다"],
+ad:["기준을 정해 결론을 내세요","상대 말을 끝까지 들으세요"],
+u:"논리와 원칙으로 결론을 내는 자리입니다. 조언을 구할 사람이 필요한 시기입니다.",
+r:"권위를 앞세우고 말로 지배합니다. 원칙이 경직으로 굳었습니다."},
 
-{s:"pentacles",n:"에이스",nm:"펜타클 에이스",en:"Ace of Pentacles",k:["기반","실질적 기회","씨앗"],u:"손에 잡히는 기회가 옵니다. 작지만 실체가 있어 키울 수 있습니다.",r:"기회를 흘려보내거나 조건이 부실합니다. 계산을 다시 해야 합니다."},
-{s:"pentacles",n:"2",nm:"펜타클 2",en:"Two of Pentacles",k:["병행","저울질","유연함"],u:"두 가지를 동시에 굴리며 균형을 잡습니다. 지금은 저글링이 필요한 시기입니다.",r:"떨어뜨립니다. 우선순위를 정하지 않으면 둘 다 놓칩니다."},
-{s:"pentacles",n:"3",nm:"펜타클 3",en:"Three of Pentacles",k:["협업","숙련","인정"],u:"각자 역할을 맡아 함께 만들어 갑니다. 실력이 쌓이며 인정받는 흐름입니다.",r:"역할이 겹치거나 기여가 무시됩니다. 협업의 규칙이 없습니다."},
-{s:"pentacles",n:"4",nm:"펜타클 4",en:"Four of Pentacles",k:["보존","움켜쥠","안전"],u:"지키는 것이 최우선입니다. 안정적이지만 그만큼 굳어 있습니다.",r:"쥐고 있던 것을 놓거나, 인색함이 손해로 돌아옵니다."},
-{s:"pentacles",n:"5",nm:"펜타클 5",en:"Five of Pentacles",k:["결핍","소외","도움 청하기"],u:"실질적으로 부족하고 혼자라고 느낍니다. 도움의 문이 바로 옆에 있는데 지나칩니다.",r:"결핍에서 회복되기 시작합니다. 도움을 받아들입니다."},
-{s:"pentacles",n:"6",nm:"펜타클 6",en:"Six of Pentacles",k:["주고받음","지원","형평"],u:"베풀거나 받는 흐름이 생깁니다. 무엇을 얼마나 주고받는지가 관계를 정합니다.",r:"주고받음이 기울어 부채감이 생깁니다. 조건 붙은 호의를 조심해야 합니다."},
-{s:"pentacles",n:"7",nm:"펜타클 7",en:"Seven of Pentacles",k:["기다림","점검","중간 평가"],u:"심어둔 것이 자라는 동안 손이 할 일은 없습니다. 지금은 점검하고 기다릴 때입니다.",r:"성과가 안 나 초조합니다. 잘못된 곳에 계속 투자하고 있는지 봐야 합니다."},
-{s:"pentacles",n:"8",nm:"펜타클 8",en:"Eight of Pentacles",k:["숙련","반복","성실"],u:"같은 일을 반복해 실력이 되는 구간입니다. 지루함이 곧 실력의 재료입니다.",r:"기계적 반복이 되어 의미가 빠졌습니다. 혹은 배움을 게을리합니다."},
-{s:"pentacles",n:"9",nm:"펜타클 9",en:"Nine of Pentacles",k:["자립","여유","성취"],u:"스스로 쌓아 올린 여유를 누립니다. 혼자서도 충분한 상태입니다.",r:"물질은 있는데 허합니다. 혹은 자립이 아직 남에게 기대어 있습니다."},
-{s:"pentacles",n:"10",nm:"펜타클 10",en:"Ten of Pentacles",k:["기반 완성","가족","유산"],u:"오래 갈 토대가 완성됩니다. 개인을 넘어 가족과 다음 세대까지 이어지는 안정입니다.",r:"돈이나 가족 문제로 갈등이 생깁니다. 물려받은 방식이 발목을 잡습니다."},
-{s:"pentacles",n:"시종",nm:"펜타클 시종",en:"Page of Pentacles",k:["학습","착수","성실한 시작"],u:"배우고 익히며 첫발을 딛습니다. 작게 시작해도 방향이 맞습니다.",r:"시작만 하고 이어가지 못합니다. 현실 감각이 부족합니다."},
-{s:"pentacles",n:"기사",nm:"펜타클 기사",en:"Knight of Pentacles",k:["꾸준함","신뢰","느린 전진"],u:"느리지만 절대 멈추지 않습니다. 이 판에서는 성실함이 가장 강한 전략입니다.",r:"지나치게 굼떠 기회를 놓칩니다. 변화 없는 반복에 갇혔습니다."},
-{s:"pentacles",n:"여왕",nm:"펜타클 여왕",en:"Queen of Pentacles",k:["실용","돌봄","살림"],u:"사람과 살림을 함께 챙기는 유능함입니다. 현실을 구체적으로 굴려 냅니다.",r:"남을 챙기다 자기를 못 챙깁니다. 걱정과 계산이 지나칩니다."},
-{s:"pentacles",n:"왕",nm:"펜타클 왕",en:"King of Pentacles",k:["안정","성과","관리"],u:"쌓아온 것을 굴려 늘리는 자리입니다. 보수적이지만 확실한 판단이 통합니다.",r:"물질에만 기준을 두거나, 통제와 인색함이 사람을 잃게 합니다."}
+{s:"pentacles",n:"에이스",nm:"펜타클 에이스",en:"Ace of Pentacles",k:["기반","실질적 기회","씨앗"],e:8,
+h:["손에 잡히는 기회가 온다","기회를 흘려보낸다"],
+ad:["작게라도 오늘 시작하세요","조건과 숫자를 다시 계산하세요"],
+u:"손에 잡히는 기회가 옵니다. 작지만 실체가 있어 키울 수 있습니다.",
+r:"기회를 흘려보내거나 조건이 부실합니다. 계산을 다시 해야 합니다."},
+{s:"pentacles",n:"2",nm:"펜타클 2",en:"Two of Pentacles",k:["병행","저울질","유연함"],e:6,
+h:["두 가지를 동시에 굴린다","둘 다 놓칠 판이다"],
+ad:["균형을 유지하며 병행하세요","우선순위 1번을 정하세요"],
+u:"두 가지를 동시에 굴리며 균형을 잡습니다. 지금은 저글링이 필요한 시기입니다.",
+r:"떨어뜨립니다. 우선순위를 정하지 않으면 둘 다 놓칩니다."},
+{s:"pentacles",n:"3",nm:"펜타클 3",en:"Three of Pentacles",k:["협업","숙련","인정"],e:8,
+h:["함께 만들며 실력이 쌓인다","기여가 무시된다"],
+ad:["역할을 나눠 협업하세요","내 몫을 분명히 말하세요"],
+u:"각자 역할을 맡아 함께 만들어 갑니다. 실력이 쌓이며 인정받는 흐름입니다.",
+r:"역할이 겹치거나 기여가 무시됩니다. 협업의 규칙이 없습니다."},
+{s:"pentacles",n:"4",nm:"펜타클 4",en:"Four of Pentacles",k:["보존","움켜쥠","안전"],e:5,
+h:["지키는 게 최우선이다","쥔 것을 놓게 된다"],
+ad:["지킬 것과 쓸 것을 나누세요","한 번은 먼저 내주세요"],
+u:"지키는 것이 최우선입니다. 안정적이지만 그만큼 굳어 있습니다.",
+r:"쥐고 있던 것을 놓거나, 인색함이 손해로 돌아옵니다."},
+{s:"pentacles",n:"5",nm:"펜타클 5",en:"Five of Pentacles",k:["결핍","소외","도움 청하기"],e:2,
+h:["부족하고 혼자라고 느낀다","회복이 시작된다"],
+ad:["도움을 요청하세요","받은 도움을 받아들이세요"],
+u:"실질적으로 부족하고 혼자라고 느낍니다. 도움의 문이 바로 옆에 있는데 지나칩니다.",
+r:"결핍에서 회복되기 시작합니다. 도움을 받아들입니다."},
+{s:"pentacles",n:"6",nm:"펜타클 6",en:"Six of Pentacles",k:["주고받음","지원","형평"],e:7,
+h:["주고받는 흐름이 생긴다","기울어 부채감이 생긴다"],
+ad:["줄 것과 받을 것을 정하세요","조건 붙은 호의를 거절하세요"],
+u:"베풀거나 받는 흐름이 생깁니다. 무엇을 얼마나 주고받는지가 관계를 정합니다.",
+r:"주고받음이 기울어 부채감이 생깁니다. 조건 붙은 호의를 조심해야 합니다."},
+{s:"pentacles",n:"7",nm:"펜타클 7",en:"Seven of Pentacles",k:["기다림","점검","중간 평가"],e:6,
+h:["심어둔 게 자라는 중이다","성과가 안 나 초조하다"],
+ad:["점검만 하고 기다리세요","투자할 곳을 다시 고르세요"],
+u:"심어둔 것이 자라는 동안 손이 할 일은 없습니다. 지금은 점검하고 기다릴 때입니다.",
+r:"성과가 안 나 초조합니다. 잘못된 곳에 계속 투자하고 있는지 봐야 합니다."},
+{s:"pentacles",n:"8",nm:"펜타클 8",en:"Eight of Pentacles",k:["숙련","반복","성실"],e:8,
+h:["반복이 실력이 되는 구간이다","기계적으로 반복만 한다"],
+ad:["같은 것을 매일 반복하세요","새 방법 하나를 배우세요"],
+u:"같은 일을 반복해 실력이 되는 구간입니다. 지루함이 곧 실력의 재료입니다.",
+r:"기계적 반복이 되어 의미가 빠졌습니다. 혹은 배움을 게을리합니다."},
+{s:"pentacles",n:"9",nm:"펜타클 9",en:"Nine of Pentacles",k:["자립","여유","성취"],e:9,
+h:["스스로 쌓은 여유를 누린다","물질은 있는데 허하다"],
+ad:["혼자서도 충분함을 누리세요","의미 있는 일에 시간을 쓰세요"],
+u:"스스로 쌓아 올린 여유를 누립니다. 혼자서도 충분한 상태입니다.",
+r:"물질은 있는데 허합니다. 혹은 자립이 아직 남에게 기대어 있습니다."},
+{s:"pentacles",n:"10",nm:"펜타클 10",en:"Ten of Pentacles",k:["기반 완성","가족","유산"],e:10,
+h:["오래 갈 토대가 완성된다","돈이나 가족 문제로 부딪힌다"],
+ad:["장기 계획으로 굳히세요","돈 이야기를 분명히 정리하세요"],
+u:"오래 갈 토대가 완성됩니다. 개인을 넘어 가족과 다음 세대까지 이어지는 안정입니다.",
+r:"돈이나 가족 문제로 갈등이 생깁니다. 물려받은 방식이 발목을 잡습니다."},
+{s:"pentacles",n:"시종",nm:"펜타클 시종",en:"Page of Pentacles",k:["학습","착수","성실한 시작"],e:7,
+h:["배우며 첫발을 딛는다","시작만 하고 못 이어간다"],
+ad:["작게 시작해 기록하세요","하루 10분씩 정해 이어가세요"],
+u:"배우고 익히며 첫발을 딛습니다. 작게 시작해도 방향이 맞습니다.",
+r:"시작만 하고 이어가지 못합니다. 현실 감각이 부족합니다."},
+{s:"pentacles",n:"기사",nm:"펜타클 기사",en:"Knight of Pentacles",k:["꾸준함","신뢰","느린 전진"],e:7,
+h:["느리지만 절대 멈추지 않는다","너무 굼떠 기회를 놓친다"],
+ad:["같은 속도로 꾸준히 하세요","기한을 정해 속도를 올리세요"],
+u:"느리지만 절대 멈추지 않습니다. 이 판에서는 성실함이 가장 강한 전략입니다.",
+r:"지나치게 굼떠 기회를 놓칩니다. 변화 없는 반복에 갇혔습니다."},
+{s:"pentacles",n:"여왕",nm:"펜타클 여왕",en:"Queen of Pentacles",k:["실용","돌봄","살림"],e:8,
+h:["사람과 살림을 함께 챙긴다","남 챙기다 나를 못 챙긴다"],
+ad:["현실적으로 하나씩 처리하세요","내 시간과 돈을 먼저 배정하세요"],
+u:"사람과 살림을 함께 챙기는 유능함입니다. 현실을 구체적으로 굴려 냅니다.",
+r:"남을 챙기다 자기를 못 챙깁니다. 걱정과 계산이 지나칩니다."},
+{s:"pentacles",n:"왕",nm:"펜타클 왕",en:"King of Pentacles",k:["안정","성과","관리"],e:9,
+h:["쌓은 것을 굴려 늘린다","돈에만 기준을 둔다"],
+ad:["확실한 쪽에 투자하세요","숫자 밖의 가치를 하나 챙기세요"],
+u:"쌓아온 것을 굴려 늘리는 자리입니다. 보수적이지만 확실한 판단이 통합니다.",
+r:"물질에만 기준을 두거나, 통제와 인색함이 사람을 잃게 합니다."}
 ];
-
-/* ---------- 수트별 서명 ---------- */
+/* ---------- 수트 ---------- */
 const SUIT={
-  major:{ko:"메이저",voice:"메이저 카드라 개인의 노력보다 큰 흐름과 시기가 개입하는 지점입니다."},
-  wands:{ko:"완드 · 불",voice:"불의 수트라 의욕과 추진력, 일과 도전의 영역에서 움직입니다."},
-  cups:{ko:"컵 · 물",voice:"물의 수트라 감정과 관계, 마음의 온도를 다룹니다."},
-  swords:{ko:"소드 · 공기",voice:"공기의 수트라 생각과 말, 판단과 갈등의 영역입니다."},
-  pentacles:{ko:"펜타클 · 흙",voice:"흙의 수트라 돈과 몸, 현실적인 조건을 말합니다."}
+  major:{ko:"메이저",el:"운명",col:"#C08A2E",axis:null,
+    voice:"내 노력보다 큰 흐름이 끼어드는 카드입니다."},
+  wands:{ko:"완드",el:"불",col:"#C05A2E",axis:"행동",
+    voice:"불의 카드입니다. 의욕과 일, 밀어붙이는 힘을 다룹니다."},
+  cups:{ko:"컵",el:"물",col:"#3C7A8C",axis:"마음",
+    voice:"물의 카드입니다. 감정과 사람 사이의 온도를 다룹니다."},
+  swords:{ko:"소드",el:"공기",col:"#93A0AC",axis:"생각",
+    voice:"공기의 카드입니다. 생각과 말, 판단과 갈등을 다룹니다."},
+  pentacles:{ko:"펜타클",el:"흙",col:"#A88420",axis:"현실",
+    voice:"흙의 카드입니다. 돈과 몸, 현실 조건을 다룹니다."}
 };
 
-/* ---------- 스프레드 ---------- */
 const SPREADS=[
- {id:"time",nm:"과거 · 현재 · 미래",note:"흐름을 보고 싶을 때. 어디서 와서 어디로 가는지 읽습니다.",
-  pos:[{nm:"과거",frame:"지난 흐름에 놓여 있던 것은"},{nm:"현재",frame:"지금 이 자리에 있는 것은"},{nm:"미래",frame:"이대로 갔을 때 향하는 곳은"}]},
- {id:"act",nm:"상황 · 행동 · 결과",note:"무엇을 할지 정해야 할 때. 가장 실용적인 배열입니다.",
-  pos:[{nm:"상황",frame:"당신이 서 있는 상황은"},{nm:"행동",frame:"지금 취할 행동으로 나온 것은"},{nm:"결과",frame:"그 끝에 놓인 결과는"}]},
- {id:"rel",nm:"나 · 상대 · 관계",note:"사람 사이의 일. 두 마음과 그 사이의 것을 나눠 봅니다.",
-  pos:[{nm:"나",frame:"당신 쪽 마음에 있는 것은"},{nm:"상대",frame:"상대 쪽 마음에 있는 것은"},{nm:"관계",frame:"두 사람 사이에 놓인 것은"}]},
- {id:"cause",nm:"원인 · 걸림돌 · 열쇠",note:"문제가 왜 풀리지 않는지 파고들 때.",
-  pos:[{nm:"원인",frame:"이 일이 시작된 뿌리에는"},{nm:"걸림돌",frame:"진행을 막고 있는 것은"},{nm:"열쇠",frame:"매듭을 푸는 열쇠는"}]}
+ {id:"act",nm:"상황 · 행동 · 결과",note:"무엇을 할지 정해야 할 때. 가장 실용적입니다.",
+  pos:[{nm:"상황",frame:"지금 서 있는 자리"},{nm:"행동",frame:"해야 할 일"},{nm:"결과",frame:"그 끝"}]},
+ {id:"time",nm:"과거 · 현재 · 미래",note:"흐름을 보고 싶을 때. 어디서 와서 어디로 가는지.",
+  pos:[{nm:"과거",frame:"지나온 자리"},{nm:"현재",frame:"지금 이 자리"},{nm:"미래",frame:"이대로 가면"}]},
+ {id:"rel",nm:"나 · 상대 · 관계",note:"사람 사이의 일. 두 마음과 그 사이를 나눠 봅니다.",
+  pos:[{nm:"나",frame:"내 마음"},{nm:"상대",frame:"상대 마음"},{nm:"관계",frame:"둘 사이"}]},
+ {id:"cause",nm:"원인 · 걸림돌 · 열쇠",note:"왜 안 풀리는지 파고들 때.",
+  pos:[{nm:"원인",frame:"이 일의 뿌리"},{nm:"걸림돌",frame:"막고 있는 것"},{nm:"열쇠",frame:"푸는 방법"}]}
 ];
 
-/* ---------- 수트 글리프 ---------- */
 const GLYPH={
  major:'<svg viewBox="0 0 40 40" fill="none" stroke="#9C4238" stroke-width="1.4"><circle cx="20" cy="20" r="11"/><path d="M20 3v34M3 20h34" stroke-width="1"/><circle cx="20" cy="20" r="4" fill="#C08A2E" stroke="none"/></svg>',
- wands:'<svg viewBox="0 0 40 40" fill="none" stroke="#6B4A22" stroke-width="1.6"><path d="M12 34L28 8"/><path d="M25 6l5 2-2 5" stroke-linejoin="round"/><path d="M16 27l6 4M18 22l6 4"/></svg>',
+ wands:'<svg viewBox="0 0 40 40" fill="none" stroke="#8A3F1C" stroke-width="1.6"><path d="M12 34L28 8"/><path d="M25 6l5 2-2 5" stroke-linejoin="round"/><path d="M16 27l6 4M18 22l6 4"/></svg>',
  cups:'<svg viewBox="0 0 40 40" fill="none" stroke="#2F5A6B" stroke-width="1.6"><path d="M11 10h18l-2 9a7 7 0 01-14 0z"/><path d="M20 28v6M13 34h14"/></svg>',
- swords:'<svg viewBox="0 0 40 40" fill="none" stroke="#4A5A62" stroke-width="1.6"><path d="M20 4v24"/><path d="M12 28h16" /><path d="M20 28v8"/><path d="M16 36h8"/></svg>',
- pentacles:'<svg viewBox="0 0 40 40" fill="none" stroke="#8A6A1E" stroke-width="1.5"><circle cx="20" cy="20" r="13"/><path d="M20 8l3.6 11.2h11.8l-9.5 6.9 3.6 11.2L20 32.4l-9.5 6.9 3.6-11.2-9.5-6.9h11.8z" transform="scale(.62) translate(12.3 12.3)"/></svg>'
+ swords:'<svg viewBox="0 0 40 40" fill="none" stroke="#4A5A62" stroke-width="1.6"><path d="M20 4v24M12 28h16M20 28v8M16 36h8"/></svg>',
+ pentacles:'<svg viewBox="0 0 40 40" fill="none" stroke="#7C6017" stroke-width="1.5"><circle cx="20" cy="20" r="13"/><path d="M20 9.5l3.1 9.6h10.1l-8.2 5.9 3.1 9.6-8.1-5.9-8.1 5.9 3.1-9.6-8.2-5.9h10.1z" transform="translate(0 -1.5) scale(.78) translate(5.6 6.5)"/></svg>'
 };
 
-/* ============================================================
-   상태
-   ============================================================ */
-const FAN_N=21;
-let spreadId="act", fanCards=[], picked=[], useRev=true;
+const FAN_N=21, REV_P=0.42;
+const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let spreadId="act", fanCards=[], picked=[], useRev=true, cells=[];
 
 const $=id=>document.getElementById(id);
-const spread=()=>SPREADS.find(s=>s.id===spreadId);
+const sp=()=>SPREADS.find(s=>s.id===spreadId);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+/* 역방향이면 기운을 뒤집는다: 좋은 카드는 힘이 빠지고, 힘든 카드는 오히려 풀린다 */
+const energy=d=>clamp(d.rev?(d.card.e>=5?d.card.e-3:d.card.e+3):d.card.e,0,10);
+const suitCol=c=>SUIT[c.s].col;
 
-/* ---------- 스프레드 UI ---------- */
+/* ---------- 카드 앞면 ---------- */
+function faceHTML(d){
+  return `<div class="face ${d.rev?"rv":""}">
+    <span class="num">${d.card.n}</span>
+    <span class="glyph">${GLYPH[d.card.s]}</span>
+    <span class="nm">${d.card.nm}</span>
+    <span class="or">${d.rev?"역방향":"정방향"}</span></div>`;
+}
+
+/* ---------- 배열법 ---------- */
 function renderSpreads(){
   $("spreads").innerHTML=SPREADS.map(s=>
     `<button class="spread" type="button" data-id="${s.id}" aria-pressed="${s.id===spreadId}">
-       <b>${s.nm}</b><span>${s.note}</span></button>`).join("");
+      <b>${s.nm}</b><span>${s.note}</span></button>`).join("");
   $("spreads").querySelectorAll(".spread").forEach(b=>{
-    b.onclick=()=>{spreadId=b.dataset.id;renderSpreads();renderBoard();hideReading();};
+    b.onclick=()=>{spreadId=b.dataset.id;renderSpreads();resetAll();};
   });
+}
+
+/* ---------- 결과판 (한 번만 만든다) ---------- */
+function buildBoard(){
+  $("board").innerHTML=sp().pos.map(p=>
+    `<div class="cell"><span class="pos-label">${p.nm}</span></div>`).join("");
+  cells=[...$("board").querySelectorAll(".cell")];
+}
+function fillCell(i,d){
+  cells[i].classList.add("on");
+  cells[i].innerHTML=faceHTML(d);
 }
 
 /* ---------- 부채꼴 ---------- */
 function dealFan(){
   fanCards=shuffle([...DECK]).slice(0,FAN_N);
-  picked=[];
-  const fan=$("fan");
-  const span=66, step=span/(FAN_N-1), start=-span/2;
-  fan.innerHTML=fanCards.map((c,i)=>{
-    const deg=start+step*i;
-    return `<button class="slot" type="button" data-i="${i}"
-             style="--t:rotate(${deg}deg);transform:rotate(${deg}deg);z-index:${i}"
-             aria-label="${i+1}번째 카드 뽑기"><span class="back"></span></button>`;
+  const span=66,step=span/(FAN_N-1),start=-span/2;
+  $("fan").innerHTML=fanCards.map((c,i)=>{
+    const deg=(start+step*i).toFixed(2);
+    return `<button class="slot" type="button" data-i="${i}" data-deg="${deg}"
+      style="--t:rotate(${deg}deg);transform:rotate(${deg}deg);z-index:${i}"
+      aria-label="카드 뽑기"><span class="back"></span></button>`;
   }).join("");
-  fan.querySelectorAll(".slot").forEach(b=>b.onclick=()=>pick(b));
-  updateCount();
-}
-
-function pick(btn){
-  if(picked.length>=3) return;
-  const i=+btn.dataset.i;
-  const card=fanCards[i];
-  const rev=useRev?Math.random()<0.42:false;
-  picked.push({card,rev});
-  btn.classList.add("taken");
-  btn.disabled=true;
-  renderBoard();
-  updateCount();
-  if(picked.length===3){
-    $("readBtn").disabled=false;
-    setTimeout(revealAll,220);
-  }
+  $("fan").querySelectorAll(".slot").forEach(b=>{
+    if(window.PointerEvent){
+      /* 끌면 스크롤, 짧게 누르면 선택 */
+      let ox=0,oy=0;
+      b.addEventListener("pointerdown",e=>{ox=e.clientX;oy=e.clientY;});
+      b.addEventListener("pointerup",e=>{
+        if(Math.hypot(e.clientX-ox,e.clientY-oy)<12) pick(b);
+      });
+    }else{
+      b.addEventListener("click",()=>pick(b));
+    }
+    b.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(b);}
+    });
+  });
 }
 
 function updateCount(){
-  const left=3-picked.length;
-  $("fanCount").textContent = left>0 ? `${left===3?"세":left===2?"두":"한"} 장 남았습니다` : "세 장을 모두 뽑았습니다";
+  const n=3-picked.length;
+  $("fanCount").textContent=n>0?`${["","한","두","세"][n]} 장 남았습니다`:"세 장을 모두 뽑았습니다";
 }
 
-function renderBoard(){
-  const pos=spread().pos;
-  $("board").innerHTML=pos.map((p,i)=>{
-    const d=picked[i];
-    if(!d) return `<div class="card"><span class="pos-label">${p.nm}</span></div>`;
-    return `<div class="card filled" data-i="${i}">
-      <div class="face ${d.rev?"rev":""}">
-        <span class="num">${d.card.n}</span>
-        <span class="glyph">${GLYPH[d.card.s]}</span>
-        <span class="nm">${d.card.nm}</span>
-        <span class="or">${d.rev?"역방향":"정방향"}</span>
-      </div></div>`;
-  }).join("");
-  // 이미 뽑힌 카드는 즉시 노출
-  picked.forEach((_,i)=>{
-    if(i<picked.length-1) $("board").children[i].classList.add("revealed");
+/* ---------- 카드 뽑기: 실제로 자리까지 날아가서 뒤집힌다 ---------- */
+function pick(btn){
+  if(picked.length>=3||btn.classList.contains("gone")) return;
+  const idx=picked.length;
+  const d={card:fanCards[+btn.dataset.i],rev:useRev?Math.random()<REV_P:false};
+  picked.push(d);
+
+  const back=btn.querySelector(".back");
+  const sr=back.getBoundingClientRect(), dr=cells[idx].getBoundingClientRect();
+  const w=btn.offsetWidth,h=btn.offsetHeight;
+  const ox=window.scrollX||window.pageXOffset, oy=window.scrollY||window.pageYOffset;
+  const scx=(sr.left+sr.right)/2+ox, scy=(sr.top+sr.bottom)/2+oy;
+  const dcx=(dr.left+dr.right)/2+ox, dcy=(dr.top+dr.bottom)/2+oy;
+
+  btn.classList.add("gone");
+  btn.disabled=true;
+  updateCount();
+
+  const done=()=>{
+    if(picked.length===3){
+      $("readBtn").disabled=false;
+      setTimeout(readNow,260);
+    }
+  };
+
+  if(reduceMotion){fillCell(idx,d);done();return;}
+
+  const fly=document.createElement("div");
+  fly.className="fly";
+  fly.style.cssText=`width:${w}px;height:${h}px;left:${scx-w/2}px;top:${scy-h/2}px;
+    transform:rotate(${btn.dataset.deg}deg)`;
+  fly.innerHTML=`<div class="fly-p"><div class="fly-in"><div class="fly-b"></div>
+    <div class="fly-f">${faceHTML(d)}</div></div></div>`;
+  document.body.appendChild(fly);
+
+  const inner=fly.querySelector(".fly-in");
+  requestAnimationFrame(()=>{
+    fly.style.transform=`translate(${dcx-scx}px,${dcy-scy}px) rotate(0deg) scale(${dr.width/w})`;
   });
+  setTimeout(()=>inner.classList.add("flip"),300);
+  setTimeout(()=>{fillCell(idx,d);fly.remove();done();},880);
 }
 
-function revealAll(){
-  const cards=$("board").querySelectorAll(".card.filled");
-  cards.forEach((c,i)=>setTimeout(()=>c.classList.add("revealed"), i*260));
-}
-
-/* ============================================================
-   해석 엔진
-   ============================================================ */
-function tableauText(){
+/* ============ 판 계산 ============ */
+function stats(){
+  const es=picked.map(energy);
+  const score=Math.round(es.reduce((a,b)=>a+b,0)/3*10);
   const majors=picked.filter(p=>p.card.s==="major").length;
   const revs=picked.filter(p=>p.rev).length;
-  const counts={};
-  picked.forEach(p=>{if(p.card.s!=="major")counts[p.card.s]=(counts[p.card.s]||0)+1;});
-  const domSuit=Object.keys(counts).find(k=>counts[k]>=2);
   const courts=picked.filter(p=>["시종","기사","여왕","왕"].includes(p.card.n)).length;
   const aces=picked.filter(p=>p.card.n==="에이스").length;
-
-  const parts=[];
-  parts.push(({
-    0:"메이저 카드가 한 장도 없습니다. 운명이 개입하는 국면이 아니라, 당신이 조정할 수 있는 범위 안의 일이라는 뜻입니다. 다르게 말하면 결과의 지분이 대부분 당신에게 있습니다.",
-    1:"메이저 한 장이 판의 축을 잡고 있습니다. 나머지는 일상의 결로 굴러가지만, 그 한 장이 가리키는 주제가 이 질문의 진짜 제목입니다.",
-    2:"메이저가 두 장 들어왔습니다. 개인의 의지 밖에서 밀려오는 힘이 상당합니다. 애써 막기보다 언제 어떻게 실릴지를 고민하는 편이 낫습니다.",
-    3:"세 장 모두 메이저입니다. 이건 요령이나 선택의 문제가 아니라 시기의 문제입니다. 지금 당신은 인생의 한 장이 넘어가는 자리에 서 있습니다."
-  })[majors]);
-
-  if(domSuit){
-    const m={
-      wands:"완드가 몰렸습니다. 질문을 무엇으로 물었든 실제 쟁점은 의욕과 일, 밀어붙일 것인가 멈출 것인가에 있습니다.",
-      cups:"컵이 몰렸습니다. 표면의 문제가 무엇이든 이 판의 핵심은 감정과 관계입니다. 논리로 정리하려 할수록 어긋납니다.",
-      swords:"소드가 몰렸습니다. 생각과 말, 판단의 문제입니다. 상황보다 그 상황을 해석하는 방식이 지금 당신을 더 힘들게 하고 있습니다.",
-      pentacles:"펜타클이 몰렸습니다. 마음의 문제로 보였더라도 실제 해법은 돈, 시간, 체력 같은 현실 조건에 있습니다."
-    };
-    parts.push(m[domSuit]);
-  }else if(majors<3){
-    parts.push("수트가 흩어져 있어 여러 영역이 동시에 얽혀 있습니다. 한 번에 다 풀려고 하면 아무것도 못 풀 판입니다.");
-  }
-
-  if(courts>=2) parts.push("인물 카드가 여럿입니다. 이 일은 혼자서 결론 나지 않습니다. 특정한 사람들의 태도가 변수입니다.");
-  else if(aces>=1) parts.push("에이스가 섞여 있습니다. 무언가가 막 시작되는 지점이니, 판단을 너무 이르게 확정하지 마세요.");
-
-  parts.push(({
-    0:"세 장 모두 정방향입니다. 흐름에 막힌 데가 없어, 카드가 말하는 것이 거의 그대로 진행됩니다.",
-    1:"역방향 한 장이 걸려 있습니다. 그 자리가 이 판에서 힘이 새거나 뒤집히는 지점입니다.",
-    2:"역방향이 두 장입니다. 겉으로 보이는 상황과 실제 작동하는 것이 다릅니다. 전제부터 다시 봐야 합니다.",
-    3:"세 장 모두 역방향입니다. 지금은 나아가는 국면이 아니라 안에서 정리되는 국면입니다. 결과를 재촉하면 전부 어긋납니다."
-  })[revs]);
-
-  return parts.join(" ");
+  const cnt={};picked.forEach(p=>{if(p.card.s!=="major")cnt[p.card.s]=(cnt[p.card.s]||0)+1;});
+  const dom=Object.keys(cnt).find(k=>cnt[k]>=2)||null;
+  const axes={행동:1,마음:1,생각:1,현실:1};
+  picked.forEach(p=>{
+    if(p.card.s==="major"){Object.keys(axes).forEach(k=>axes[k]+=0.7);}
+    else axes[SUIT[p.card.s].axis]+=3;
+  });
+  Object.keys(axes).forEach(k=>axes[k]=clamp(axes[k],0,10));
+  const order=[...picked.keys()].sort((a,b)=>es[b]-es[a]);
+  return {es,score,majors,revs,courts,aces,dom,axes,best:order[0],worst:order[2]};
 }
 
-function entryText(d,p){
-  const c=d.card;
-  const meaning=d.rev?c.r:c.u;
-  const orient=d.rev?"역방향":"정방향";
+function band(s){
+  if(s>=78) return ["밀어붙일 때","순풍입니다. 미루지 말고 지금 하세요."];
+  if(s>=60) return ["준비한 만큼 가는 때","큰 장애는 없습니다. 준비된 것부터 하나씩 내보내세요."];
+  if(s>=42) return ["밀고 당기는 때","돕는 힘과 막는 힘이 반반입니다. 순서를 잘 잡는 것이 관건입니다."];
+  if(s>=25) return ["정리하고 버티는 때","새로 벌이면 손해입니다. 이미 벌인 것을 닫으세요."];
+  return ["멈추고 회복할 때","지금은 결정할 시기가 아닙니다. 쉬고 힘을 모으세요."];
+}
+
+/* ============ 그림 ============ */
+function gaugeSVG(score){
+  const W=340,x0=14,x1=326,y=34,w=x1-x0;
+  const zones=[[0,25,"회복"],[25,42,"정리"],[42,60,"반반"],[60,78,"순조"],[78,100,"순풍"]];
+  const px=v=>x0+w*v/100;
+  const cols=["#7A3F38","#8C6A3A","#8A8560","#79913F","#5FA05A"];
+  let s=`<svg viewBox="0 0 ${W} 72" role="img" aria-label="흐름 점수 ${score}점">`;
+  zones.forEach((z,i)=>{
+    s+=`<rect x="${px(z[0]).toFixed(1)}" y="${y}" width="${(px(z[1])-px(z[0])).toFixed(1)}" height="11"
+      fill="${cols[i]}" opacity="${i===zones.findIndex(a=>score>=a[0]&&score<=a[1])?".95":".3"}"/>`;
+    s+=`<text x="${((px(z[0])+px(z[1]))/2).toFixed(1)}" y="62" fill="#8FA09F" font-size="10"
+      text-anchor="middle" font-family="Gowun Batang,serif">${z[2]}</text>`;
+  });
+  const mx=px(score);
+  s+=`<polygon points="${mx.toFixed(1)},26 ${(mx-6).toFixed(1)},14 ${(mx+6).toFixed(1)},14" fill="#EDE3CC"/>`;
+  s+=`<text x="${clamp(mx,26,W-26).toFixed(1)}" y="11" fill="#EDE3CC" font-size="13" text-anchor="middle"
+    font-family="Song Myung,serif">${score}</text>`;
+  return s+`</svg>`;
+}
+
+function flowSVG(){
+  const st=stats(),P=sp().pos,W=340,H=170;
+  const xs=[52,170,288], ty=28, by=118;
+  const yv=e=>by-(by-ty)*e/10;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="세 자리의 기운 흐름">`;
+  [0,5,10].forEach(v=>{
+    s+=`<line x1="24" y1="${yv(v).toFixed(1)}" x2="${W-24}" y2="${yv(v).toFixed(1)}"
+      stroke="#EDE3CC" stroke-opacity=".13"/>`;
+    s+=`<text x="14" y="${(yv(v)+3.5).toFixed(1)}" fill="#8FA09F" font-size="9">${v}</text>`;
+  });
+  s+=`<polyline points="${xs.map((x,i)=>`${x},${yv(st.es[i]).toFixed(1)}`).join(" ")}"
+    fill="none" stroke="#C08A2E" stroke-width="2" stroke-linejoin="round"/>`;
+  picked.forEach((d,i)=>{
+    const x=xs[i],y=yv(st.es[i]);
+    s+=`<circle cx="${x}" cy="${y.toFixed(1)}" r="7" fill="${suitCol(d.card)}" stroke="#1F3238" stroke-width="2"/>`;
+    s+=`<text x="${x}" y="${(y-14).toFixed(1)}" fill="#EDE3CC" font-size="12" text-anchor="middle"
+      font-family="Song Myung,serif">${st.es[i]}</text>`;
+    s+=`<text x="${x}" y="140" fill="#C08A2E" font-size="11" text-anchor="middle"
+      font-family="Song Myung,serif">${P[i].nm}</text>`;
+    s+=`<text x="${x}" y="157" fill="#8FA09F" font-size="10" text-anchor="middle">${d.card.nm}${d.rev?" ↓":""}</text>`;
+  });
+  return s+`</svg>`;
+}
+
+function axesSVG(){
+  const a=stats().axes,W=340,rows=Object.keys(a);
+  const x0=68,x1=326,rh=30,H=rows.length*rh+8;
+  const cols={행동:"#C05A2E",마음:"#3C7A8C",생각:"#93A0AC",현실:"#A88420"};
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="영역별 무게">`;
+  rows.forEach((k,i)=>{
+    const y=i*rh+8, bw=(x1-x0)*a[k]/10;
+    s+=`<text x="58" y="${y+13}" fill="#EDE3CC" font-size="12" text-anchor="end"
+      font-family="Song Myung,serif">${k}</text>`;
+    s+=`<rect x="${x0}" y="${y+3}" width="${x1-x0}" height="13" rx="2" fill="#EDE3CC" fill-opacity=".1"/>`;
+    s+=`<rect x="${x0}" y="${y+3}" width="${bw.toFixed(1)}" height="13" rx="2" fill="${cols[k]}"/>`;
+  });
+  return s+`</svg>`;
+}
+
+/* ============ 문장 ============ */
+function tableauLines(){
+  const st=stats(),P=sp().pos,L=[];
+  L.push(["판 성격",({
+    0:"메이저 카드가 없습니다. 운명이 끼어든 게 아니라 내가 조정할 수 있는 일입니다.",
+    1:"메이저 한 장이 축을 잡고 있습니다. 그 카드가 이 질문의 진짜 제목입니다.",
+    2:"메이저가 두 장입니다. 내 뜻 밖에서 밀려오는 힘이 큽니다.",
+    3:"세 장 모두 메이저입니다. 요령의 문제가 아니라 시기의 문제입니다."
+  })[st.majors]]);
+  L.push(["가장 큰 힘",`${P[st.best].nm} 자리의 ${picked[st.best].card.nm}. ${picked[st.best].card.h[picked[st.best].rev?1:0]}.`]);
+  L.push(["조심할 것",`${P[st.worst].nm} 자리의 ${picked[st.worst].card.nm}. ${picked[st.worst].card.h[picked[st.worst].rev?1:0]}.`]);
+  L.push(["역방향",({
+    0:"세 장 모두 정방향입니다. 카드가 말하는 대로 거의 그대로 갑니다.",
+    1:"역방향 한 장. 그 자리가 힘이 새는 지점입니다.",
+    2:"역방향 두 장. 겉모습과 실제가 다릅니다. 전제부터 다시 보세요.",
+    3:"세 장 모두 역방향. 나아가는 때가 아니라 안에서 정리되는 때입니다."
+  })[st.revs]]);
+  return L;
+}
+
+function axesNote(){
+  const st=stats();
+  if(st.dom){
+    return ({wands:"완드가 몰렸습니다. 무엇을 물었든 실제 쟁점은 일과 의욕, 밀지 말지에 있습니다.",
+      cups:"컵이 몰렸습니다. 핵심은 감정과 관계입니다. 논리로 정리하려 할수록 어긋납니다.",
+      swords:"소드가 몰렸습니다. 상황보다 그 상황을 해석하는 방식이 더 힘들게 하고 있습니다.",
+      pentacles:"펜타클이 몰렸습니다. 해법은 마음가짐이 아니라 돈·시간·체력 같은 조건에 있습니다."})[st.dom];
+  }
+  if(st.majors===3) return "수트 카드가 없습니다. 세부 대응보다 큰 방향을 정하는 것이 먼저입니다.";
+  const top=Object.entries(st.axes).sort((a,b)=>b[1]-a[1])[0][0];
+  return `영역이 흩어져 있습니다. 한 번에 다 풀려고 하면 아무것도 못 풉니다. ${top}부터 손대세요.`;
+}
+
+function flowNote(){
+  const st=stats(),P=sp().pos,[a,b,c]=st.es;
+  if(c>a+2) return `${P[0].nm}에서 ${P[2].nm}로 갈수록 기운이 올라갑니다. 지금 힘들어도 방향은 맞습니다.`;
+  if(a>c+2) return `${P[0].nm}보다 ${P[2].nm}의 기운이 낮습니다. 지금 방식대로 가면 힘이 빠집니다. 중간에서 바꿔야 합니다.`;
+  if(b<a&&b<c) return `가운데가 내려앉았습니다. ${P[1].nm}이 이번 리딩의 고비입니다. 여기만 넘기면 됩니다.`;
+  if(b>a&&b>c) return `가운데가 가장 높습니다. ${P[1].nm}에 힘이 몰려 있으니 이 시기를 놓치지 마세요.`;
+  return "세 자리의 기운이 고릅니다. 급변보다 꾸준한 진행으로 풀리는 판입니다.";
+}
+
+function adviceLines(){
+  const st=stats(),P=sp().pos,out=[];
+  const first=({
+    wands:"먼저 몸을 움직이세요. 완벽한 계획보다 시작한 사실이 상황을 바꿉니다.",
+    cups:"먼저 마음을 말로 꺼내세요. 정리 안 된 마음으로 내린 결정은 대개 번복됩니다.",
+    swords:"먼저 사실과 추측을 종이에 나눠 적으세요. 절반은 실제 문제가 아니라 해석의 문제입니다.",
+    pentacles:"먼저 숫자와 일정을 확인하세요. 마음가짐이 아니라 조건을 바꿔야 답이 나옵니다."
+  })[st.dom];
+  out.push(first||"먼저 원하는 결말을 한 문장으로 적으세요. 방향 감각이 지금 유일한 도구입니다.");
+  if(st.revs>=2) out.push("역방향이 많습니다. 새로 벌이지 말고 이미 벌여둔 것을 먼저 닫으세요.");
+  else if(st.majors>=2) out.push("큰 흐름이 끼어든 판입니다. 통제하려 들면 지칩니다. 내가 고를 수 있는 작은 선택 하나에 집중하세요.");
+  else out.push("막힌 데가 적습니다. 미루던 한 가지를 이번 주에 실제로 처리하는 것이 가장 정확한 응답입니다.");
+  if(st.courts>=2) out.push("인물 카드가 여럿입니다. 혼자서 결론 나지 않습니다. 특정한 사람의 태도가 변수입니다.");
+  else if(st.aces>=1) out.push("에이스가 섞여 있습니다. 막 시작되는 지점이니 판단을 이르게 확정하지 마세요.");
+  const last=picked[2];
+  out.push(`마지막 ${P[2].nm} 자리의 ${last.card.nm}이 이 리딩의 마침표입니다. 한 달 뒤 이 카드를 다시 떠올려 보세요. 무엇이 맞았고 빗나갔는지가 다음 리딩의 실력이 됩니다.`);
+  return out;
+}
+
+/* ============ 출력 ============ */
+function entryHTML(d,p,i){
+  const idx=d.rev?1:0, e=energy(d), col=suitCol(d.card);
   return `<div class="entry">
-    <h3>${p.nm} — ${c.nm} <span style="font-size:.8em;color:#93A3A2">(${orient})</span></h3>
-    <p class="meta">${c.en} · ${SUIT[c.s].ko}</p>
-    <p>${p.frame} ${c.nm} ${orient}입니다. ${meaning}</p>
-    <p>${SUIT[c.s].voice}</p>
-    <p class="keys">키워드 · ${c.k.join(" / ")}</p>
+    <div class="top"><span class="pos">${p.nm}</span>
+      <span class="cn">${d.card.nm}</span>
+      <span class="${d.rev?"rv":"up"}">${d.rev?"역방향":"정방향"}</span></div>
+    <p class="oneline">${d.card.h[idx]}</p>
+    <p class="kv"><b>풀어서 보면</b>${d.rev?d.card.r:d.card.u}</p>
+    <p class="todo"><b>지금 할 일</b>${d.card.ad[idx]}</p>
+    <p class="kv"><b>${p.frame}</b>${SUIT[d.card.s].voice} 키워드는 ${d.card.k.join(", ")}입니다.</p>
+    <div class="mini"><span>기운 ${e}/10</span>
+      <span class="bar"><i style="width:${e*10}%;background:${col}"></i></span>
+      <span>${SUIT[d.card.s].ko} · ${SUIT[d.card.s].el}</span></div>
   </div>`;
 }
 
-function adviceText(){
-  const revs=picked.filter(p=>p.rev).length;
-  const majors=picked.filter(p=>p.card.s==="major").length;
-  const counts={};
-  picked.forEach(p=>{if(p.card.s!=="major")counts[p.card.s]=(counts[p.card.s]||0)+1;});
-  const dom=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
-  const last=picked[2].card;
-
-  let a=[];
-  a.push(({
-    wands:"먼저 몸을 움직이세요. 이 판에서는 완벽한 계획보다 시작한 사실이 상황을 바꿉니다.",
-    cups:"먼저 감정을 말로 꺼내세요. 정리되지 않은 마음을 안고 내리는 결정은 대부분 나중에 번복됩니다.",
-    swords:"먼저 사실과 추측을 종이에 나눠 적으세요. 이 판의 절반은 실제 문제가 아니라 해석의 문제입니다.",
-    pentacles:"먼저 숫자와 일정을 확인하세요. 이 질문은 마음가짐이 아니라 조건을 바꿔야 답이 나옵니다."
-  })[dom] || "먼저 이 일에서 당신이 정말 원하는 결말을 한 문장으로 적어보세요. 세 장 모두 메이저인 판에서는 방향 감각이 유일한 도구입니다.");
-
-  if(revs>=2) a.push("역방향이 많으니 지금은 확장이 아니라 점검의 시기입니다. 새로 벌이지 말고 이미 벌여둔 것을 먼저 닫으세요.");
-  else if(majors>=2) a.push("큰 흐름이 개입한 판입니다. 통제하려 들면 지치니, 흐름 안에서 당신이 고를 수 있는 작은 선택 하나에 집중하세요.");
-  else a.push("막힌 데가 적은 판입니다. 미루던 한 가지를 이번 주에 실제로 처리하는 것이 리딩의 가장 정확한 응답입니다.");
-
-  a.push(`마지막 자리에 놓인 ${last.nm}이 이 리딩의 마침표입니다. 한 달쯤 뒤에 이 카드를 다시 떠올려 보세요. 그때 무엇이 맞았고 무엇이 빗나갔는지가 다음 리딩의 실력이 됩니다.`);
-  return a.join(" ");
-}
-
 function readNow(){
-  const sp=spread();
-  const q=$("q").value.trim();
-  $("rSpread").textContent=sp.nm;
-  $("rQ").textContent = q ? `물음 — ${q}` : "물음을 적지 않고 뽑았습니다. 카드는 지금 당신에게 가장 급한 것에 답합니다.";
-  $("rTableau").textContent=tableauText();
-  $("rEntries").innerHTML=picked.map((d,i)=>entryText(d,sp.pos[i])).join("");
-  $("rAdvice").textContent=adviceText();
+  if(picked.length<3) return;
+  const s=sp(),st=stats(),q=$("q").value.trim(),[t,sub]=band(st.score);
+  $("rSpread").textContent=s.nm;
+  $("rQ").textContent=q?`물음 — ${q}`:"물음을 적지 않고 뽑았습니다. 카드는 지금 가장 급한 것에 답합니다.";
+  $("rVerdict").textContent=`지금은 ${t}입니다`;
+  $("rVerdictSub").textContent=sub;
+  $("rGauge").innerHTML=gaugeSVG(st.score);
+  $("rThree").innerHTML=tableauLines().map(([k,v])=>`<li><b>${k}</b><span>${v}</span></li>`).join("");
+  $("rFlow").innerHTML=flowSVG();
+  $("rFlowNote").textContent=flowNote();
+  $("rAxes").innerHTML=axesSVG();
+  $("rAxesNote").textContent=axesNote();
+  $("rEntries").innerHTML=picked.map((d,i)=>entryHTML(d,s.pos[i],i)).join("");
+  $("rAdvice").innerHTML=adviceLines().map(x=>`<p>${x}</p>`).join("");
   $("reading").classList.add("on");
   $("copied").textContent="";
-  $("reading").scrollIntoView({behavior:"smooth",block:"start"});
+  $("reading").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"});
 }
-
-function hideReading(){$("reading").classList.remove("on");}
 
 function plainText(){
-  const sp=spread(), q=$("q").value.trim();
-  let t=`[${sp.nm}]\n`;
-  if(q) t+=`물음: ${q}\n`;
-  t+=`\n판 전체\n${tableauText()}\n\n`;
+  const s=sp(),st=stats(),q=$("q").value.trim(),[t,sub]=band(st.score);
+  let x=`[${s.nm}]\n`;
+  if(q) x+=`물음: ${q}\n`;
+  x+=`\n지금은 ${t}입니다 (흐름 ${st.score}점)\n${sub}\n\n`;
+  tableauLines().forEach(([k,v])=>x+=`· ${k}: ${v}\n`);
+  x+=`\n흐름: ${flowNote()}\n영역: ${axesNote()}\n\n`;
   picked.forEach((d,i)=>{
-    t+=`${sp.pos[i].nm} — ${d.card.nm} (${d.rev?"역방향":"정방향"})\n${d.rev?d.card.r:d.card.u}\n\n`;
+    const j=d.rev?1:0;
+    x+=`[${s.pos[i].nm}] ${d.card.nm} (${d.rev?"역방향":"정방향"}) 기운 ${energy(d)}/10\n`;
+    x+=`"${d.card.h[j]}"\n풀이: ${d.rev?d.card.r:d.card.u}\n할 일: ${d.card.ad[j]}\n\n`;
   });
-  t+=`맺는 조언\n${adviceText()}\n`;
-  return t;
+  x+=`맺는 조언\n`+adviceLines().map(l=>"· "+l).join("\n")+"\n";
+  return x;
 }
 
-/* ---------- 이벤트 ---------- */
-renderSpreads();
-renderBoard();
-dealFan();
+/* ============ 초기화 ============ */
+function resetAll(){
+  picked=[];
+  buildBoard();
+  dealFan();
+  updateCount();
+  $("reading").classList.remove("on");
+  $("readBtn").disabled=true;
+  document.querySelectorAll(".fly").forEach(f=>f.remove());
+}
 
+renderSpreads();
+resetAll();
 $("readBtn").onclick=readNow;
-$("resetBtn").onclick=()=>{dealFan();renderBoard();hideReading();$("readBtn").disabled=true;};
+$("resetBtn").onclick=resetAll;
 $("revOn").onchange=e=>{useRev=e.target.checked;};
 $("copyBtn").onclick=async()=>{
-  try{ await navigator.clipboard.writeText(plainText()); $("copied").textContent="복사했습니다."; }
-  catch{ $("copied").textContent="복사가 막혀 있습니다. 화면의 글을 직접 선택해 복사하세요."; }
+  try{await navigator.clipboard.writeText(plainText());$("copied").textContent="복사했습니다.";}
+  catch{$("copied").textContent="복사가 막혀 있습니다. 화면의 글을 직접 선택해 복사하세요.";}
 };
+
 </script>
 </body>
 </html>
