@@ -96,10 +96,13 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .face .rvtag{position:absolute;top:0;left:0;background:var(--rust);color:#F3EBD8;
   font-family:var(--display);font-size:.6rem;padding:.06rem .3rem;letter-spacing:.06em}
 /* 그림을 못 불러왔을 때의 예비 앞면 */
-.face .fb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;
+.face .fb,.shot .fb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;
   justify-content:center;gap:.2rem;color:var(--ink);padding:.4rem;text-align:center}
-.face.nofig img{display:none}
-.face.nofig .fb{display:flex}
+.face.nofig img,.shot.nofig img{display:none}
+.face.nofig .fb,.shot.nofig .fb{display:flex}
+.shot .fb .n{font-family:var(--display);font-size:.66rem;color:var(--rust);letter-spacing:.08em}
+.shot .fb svg{width:52%;max-width:44px;height:auto}
+.shot.rv .fb svg{transform:rotate(180deg)}
 .face .fb .n{font-family:var(--display);font-size:.68rem;color:var(--rust);letter-spacing:.1em}
 .face .fb svg{width:52%;max-width:46px;height:auto}
 .face.rv .fb svg{transform:rotate(180deg)}
@@ -217,6 +220,7 @@ footer{margin-top:3.4rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,20
       <button class="btn" id="keyBtn">확인</button>
     </div>
     <p class="st" id="keySt"></p>
+    <p class="st" id="diag"></p>
     <p class="warn">이 파일은 GitHub에 올리지 마세요. 키가 그대로 공개됩니다. 혼자 쓰는 용도입니다.</p>
   </section>
 
@@ -853,7 +857,7 @@ function pick(btn) {
   const done = () => {
     $("cue").textContent = ["두 번째 카드를 뽑으세요.", "마지막 카드를 뽑으세요.",
       "세 장이 모두 나왔습니다. 이제 읽어 드립니다."][idx];
-    if (picked.length === 3) { $("readBtn").disabled = false; setTimeout(runReading, 500); }
+    if (picked.length === 3) { $("readBtn").disabled = false; checkImages(); setTimeout(runReading, 500); }
   };
   if (reduce) { fillCell(idx, d); done(); return; }
 
@@ -956,7 +960,10 @@ ${lines}
 
 위 질문에 대해 이 세 장으로 리딩해 주세요. 카드 사전을 옮겨 적지 말고, 질문의 상황으로 번역해서 말해 주세요.`;
 
+      const ac = new AbortController();
+      const timer = setTimeout(() => ac.abort(), 60000);
       const res = await fetch("https://api.anthropic.com/v1/messages", {
+        signal: ac.signal,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -969,6 +976,7 @@ ${lines}
           messages: [{ role: "user", content: user }],
         }),
       });
+      clearTimeout(timer);
       const j = await res.json();
       if (!res.ok) throw new Error((j.error && j.error.message) || ("오류 " + res.status));
       let t = (j.content || []).filter((b) => b.type === "text").map((b) => b.text).join("").trim();
@@ -980,8 +988,12 @@ ${lines}
       }
       if (!r || !Array.isArray(r.cards)) throw new Error("해석을 읽어들이지 못했습니다.");
     } catch (e) {
+      let msg = e.name === "AbortError" ? "60초 안에 응답이 오지 않았습니다."
+        : /Load failed|Failed to fetch|NetworkError/i.test(e.message)
+          ? "브라우저가 요청을 막았습니다. 파일을 직접 열지 말고 https 주소로 접속해야 합니다."
+          : e.message;
       $("rTurns").innerHTML = `<div class="errbox"><b>해석을 받지 못했습니다</b>
-        ${esc(e.message)}<br>기본 해석으로 대신 읽어 드립니다.</div>`;
+        ${esc(msg)}<br>기본 해석으로 대신 읽어 드립니다.</div>`;
       r = null;
       await new Promise((z) => setTimeout(z, 1600));
     }
@@ -1066,6 +1078,7 @@ function resetAll(keepQ) {
 
 renderSpreads();
 resetAll(true);
+checkEnv();
 $("readBtn").onclick = runReading;
 $("resetBtn").onclick = () => resetAll(true);
 $("restartBtn").onclick = () => {
@@ -1073,6 +1086,31 @@ $("restartBtn").onclick = () => {
   window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
 };
 $("revOn").onchange = (e) => { useRev = e.target.checked; };
+
+function checkEnv() {
+  const d = $("diag");
+  if (location.protocol === "file:") {
+    d.className = "st no";
+    d.textContent = "파일을 직접 열었습니다. 이 상태로는 해석 요청이 막힙니다. https 주소로 접속하세요.";
+    return false;
+  }
+  d.className = "st"; d.textContent = "";
+  return true;
+}
+
+/* 그림이 하나도 안 뜨는 경우를 알려준다 */
+function checkImages() {
+  setTimeout(() => {
+    const imgs = [...document.querySelectorAll(".cell img, .shot img")];
+    if (!imgs.length) return;
+    const dead = imgs.filter((i) => i.complete && i.naturalWidth === 0).length;
+    if (dead === imgs.length) {
+      const d = $("diag");
+      d.className = "st no";
+      d.textContent = "카드 그림을 불러오지 못했습니다. 위키미디어 접속이 막힌 환경입니다. 해석은 정상 작동합니다.";
+    }
+  }, 4000);
+}
 
 function applyKey() {
   const v = $("key").value.trim();
