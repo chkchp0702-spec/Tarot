@@ -49,9 +49,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .orient{margin-top:.7rem;font-size:.87rem;color:var(--paper-dim);display:flex;align-items:center;gap:.5rem}
 .orient input{width:1.05rem;height:1.05rem;accent-color:var(--ochre);margin:0}
 
-.fan-stage{position:relative;height:264px;margin-top:1.1rem;touch-action:manipulation;user-select:none}
-.fan{position:absolute;left:50%;bottom:-40px;width:0;height:0}
-.slot{position:absolute;width:74px;height:122px;margin-left:-37px;transform-origin:50% 118%;
+.fan-stage{position:relative;height:320px;margin-top:1.1rem;touch-action:manipulation;user-select:none;overflow:hidden}
+.fan{position:absolute;left:50%;bottom:14px;width:0;height:0}
+.slot{position:absolute;bottom:0;left:0;width:74px;height:122px;margin-left:-37px;transform-origin:50% 250%;
   cursor:pointer;background:none;border:0;padding:0;
   transition:transform .26s cubic-bezier(.2,.7,.3,1),opacity .3s;will-change:transform}
 .slot .back{display:block;width:100%;height:100%;border-radius:4px;
@@ -63,7 +63,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .slot:not(.gone):active{transform:var(--t) translateY(-18px) scale(1.03)}
 .slot.gone{opacity:0;pointer-events:none}
 .slot:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:4px}
-.fan-count{position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:.83rem;color:var(--paper-far)}
+.fan-count{position:absolute;left:0;right:0;bottom:-4px;z-index:3;text-align:center;font-size:.83rem;color:var(--paper-far)}
 
 .fly{position:absolute;z-index:60;pointer-events:none;transform-origin:50% 50%;
   transition:transform .6s cubic-bezier(.22,.68,.24,1);will-change:transform}
@@ -78,7 +78,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   border:1px solid rgba(192,138,46,.5);box-shadow:0 10px 26px rgba(0,0,0,.5)}
 .fly-f{transform:rotateY(180deg)}
 
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1.4rem}
+.board{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1.4rem}
 .cell{position:relative;aspect-ratio:5/8.6;border-radius:4px;background:rgba(237,227,204,.05);
   border:1px dashed rgba(237,227,204,.22);display:flex;align-items:center;justify-content:center}
 .cell .pos-label{font-family:var(--display);font-size:.8rem;color:var(--paper-far);letter-spacing:.05em}
@@ -197,13 +197,16 @@ footer{margin-top:3.4rem;padding-top:1.4rem;border-top:1px solid rgba(237,227,20
 
 @media (max-width:400px){
   .slot{width:62px;height:104px;margin-left:-31px}
-  .fan-stage{height:226px}
+  .fan-stage{height:272px}
   .turn{gap:.7rem}.turn .pic{flex-basis:70px}.turn .pic .shot{width:70px}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important;animation-duration:.01ms !important}}
 </style>
 </head>
 <body>
+<div id="crash" style="display:none;position:fixed;left:0;right:0;top:0;z-index:200;
+  background:#7A2A22;color:#F3E6E2;font:13px/1.6 ui-monospace,monospace;padding:.7rem .9rem;
+  max-height:42vh;overflow:auto"></div>
 <div class="wrap">
   <header class="masthead">
     <h1>세 장의 카드</h1>
@@ -771,11 +774,22 @@ const GLYPH = {
   pentacles: '<svg viewBox="0 0 40 40" fill="none" stroke="#7C6017" stroke-width="1.5"><circle cx="20" cy="20" r="13"/><path d="M20 9.5l3.1 9.6h10.1l-8.2 5.9 3.1 9.6-8.1-5.9-8.1 5.9 3.1-9.6-8.2-5.9h10.1z" transform="translate(0 -1.5) scale(.78) translate(5.6 6.5)"/></svg>',
 };
 
-const FAN_N = 21, REV_P = 0.42, ORDER = ["첫 번째", "두 번째", "세 번째"];
+const FAN_N = 15, REV_P = 0.42, ORDER = ["첫 번째", "두 번째", "세 번째"];
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let spreadId = "act", fanCards = [], picked = [], useRev = true, cells = [], lastReading = null;
 
 const $ = (id) => document.getElementById(id);
+
+/* 조용히 죽지 않도록 오류를 화면에 띄운다 */
+function crash(what, err) {
+  const box = document.getElementById("crash");
+  if (!box) return;
+  box.style.display = "block";
+  box.textContent += `[${what}] ${err && err.message ? err.message : err}\n`;
+  console.error(what, err);
+}
+window.addEventListener("error", (ev) => crash("오류", ev.error || ev.message));
+window.addEventListener("unhandledrejection", (ev) => crash("처리 안 된 오류", ev.reason));
 const sp = () => SPREADS.find((s) => s.id === spreadId);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -819,7 +833,7 @@ function fillCell(i, d) {
 /* ---------- 부채꼴 ---------- */
 function dealFan() {
   fanCards = shuffle([...DECK]).slice(0, FAN_N);
-  const span = 66, step = span / (FAN_N - 1), start = -span / 2;
+  const span = 58, step = span / (FAN_N - 1), start = -span / 2;
   $("fan").innerHTML = fanCards.map((c, i) => {
     const deg = (start + step * i).toFixed(2);
     return `<button class="slot" type="button" data-i="${i}" data-deg="${deg}"
@@ -844,34 +858,61 @@ function pick(btn) {
   const idx = picked.length;
   const d = { card: fanCards[+btn.dataset.i], rev: useRev ? Math.random() < REV_P : false };
   picked.push(d);
-
-  const back = btn.querySelector(".back");
-  const sr = back.getBoundingClientRect(), dr = cells[idx].getBoundingClientRect();
-  const w = btn.offsetWidth, h = btn.offsetHeight;
-  const ox = window.scrollX || 0, oy = window.scrollY || 0;
-  const scx = (sr.left + sr.right) / 2 + ox, scy = (sr.top + sr.bottom) / 2 + oy;
-  const dcx = (dr.left + dr.right) / 2 + ox, dcy = (dr.top + dr.bottom) / 2 + oy;
-
-  btn.classList.add("gone"); btn.disabled = true; updateCount();
+  btn.classList.add("gone");
+  btn.disabled = true;
+  updateCount();
 
   const done = () => {
-    $("cue").textContent = ["두 번째 카드를 뽑으세요.", "마지막 카드를 뽑으세요.",
-      "세 장이 모두 나왔습니다. 이제 읽어 드립니다."][idx];
-    if (picked.length === 3) { $("readBtn").disabled = false; checkImages(); setTimeout(runReading, 500); }
+    try {
+      $("cue").textContent = ["두 번째 카드를 뽑으세요.", "마지막 카드를 뽑으세요.",
+        "세 장이 모두 나왔습니다. 이제 읽어 드립니다."][idx];
+      if (picked.length === 3) {
+        $("readBtn").disabled = false;
+        checkImages();
+        setTimeout(runReading, 500);
+      }
+    } catch (err) { crash("다음 단계", err); }
   };
-  if (reduce) { fillCell(idx, d); done(); return; }
 
-  const fly = document.createElement("div");
-  fly.className = "fly";
-  fly.style.cssText = `width:${w}px;height:${h}px;left:${scx - w / 2}px;top:${scy - h / 2}px;transform:rotate(${btn.dataset.deg}deg)`;
-  fly.innerHTML = `<div class="fly-p"><div class="fly-in"><div class="fly-b"></div><div class="fly-f">${faceHTML(d)}</div></div></div>`;
-  document.body.appendChild(fly);
-  const inner = fly.querySelector(".fly-in");
-  requestAnimationFrame(() => {
-    fly.style.transform = `translate(${dcx - scx}px,${dcy - scy}px) rotate(0deg) scale(${dr.width / w})`;
-  });
-  setTimeout(() => inner.classList.add("flip"), 300);
-  setTimeout(() => { fillCell(idx, d); fly.remove(); done(); }, 880);
+  /* 애니메이션은 있으면 좋은 것. 실패해도 카드는 반드시 놓인다 */
+  const place = () => { try { fillCell(idx, d); } catch (err) { crash("카드 놓기", err); } };
+
+  if (reduce) { place(); done(); return; }
+
+  let fly = null;
+  try {
+    const back = btn.querySelector(".back");
+    const cell = cells[idx];
+    if (!back || !cell) throw new Error("카드 자리를 찾지 못했습니다.");
+    const sr = back.getBoundingClientRect(), dr = cell.getBoundingClientRect();
+    const w = btn.offsetWidth, h = btn.offsetHeight;
+    const ox = window.scrollX || 0, oy = window.scrollY || 0;
+    const scx = (sr.left + sr.right) / 2 + ox, scy = (sr.top + sr.bottom) / 2 + oy;
+    const dcx = (dr.left + dr.right) / 2 + ox, dcy = (dr.top + dr.bottom) / 2 + oy;
+
+    fly = document.createElement("div");
+    fly.className = "fly";
+    fly.style.cssText = `width:${w}px;height:${h}px;left:${scx - w / 2}px;top:${scy - h / 2}px;transform:rotate(${btn.dataset.deg}deg)`;
+    fly.innerHTML = `<div class="fly-p"><div class="fly-in"><div class="fly-b"></div><div class="fly-f">${faceHTML(d)}</div></div></div>`;
+    document.body.appendChild(fly);
+    const inner = fly.querySelector(".fly-in");
+    requestAnimationFrame(() => {
+      fly.style.transform = `translate(${dcx - scx}px,${dcy - scy}px) rotate(0deg) scale(${dr.width / w})`;
+    });
+    setTimeout(() => inner.classList.add("flip"), 300);
+  } catch (err) {
+    crash("카드 날리기", err);
+    if (fly) fly.remove();
+    place(); done();
+    return;
+  }
+
+  /* 무슨 일이 있어도 이 타이머는 카드를 놓고 다음으로 넘긴다 */
+  setTimeout(() => {
+    place();
+    if (fly) fly.remove();
+    done();
+  }, 880);
 }
 
 /* ============================================================
